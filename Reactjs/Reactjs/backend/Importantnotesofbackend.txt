@@ -1,0 +1,1815 @@
+Date:- 1/08/2023
+
+Notes for logout ------->>>>
+
+
+
+
+we should now genetrate the token---->
+import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser';
+
+to genetrate the token we use jsonwebtoken and to store the token  we use cookie 
+
+
+now let's generate a token--->
+
+if the response is okay then we will generate a token 
+if(response){
+const name =  data[0].name;
+const token  =  jwt.sign({name}, "jwt-secret-key",{expiresIn: '1d'});
+//here name is payload that we have passed to jwt.sign, we could pass instead of name , ID also now then we will pass secret key
+or unique key  that should be in .env file in real application so that u can access from that place after that we pass optionals 
+i.e {expiresIn: '1d'} means that it will expires in 1 day
+
+we have generated our token now when we generate our token we should store it in cookie so the cookies are in frontside of the 
+browser and we are at the backend side
+so what we should do now?
+
+app.use(cors({
+  origin: [""] --> iske ander URL hoga frontend wala
+  methods: ["POST","GET"],
+  credentials: true
+}));
+
+
+Login page me ye likhe hai
+axios.defaults.withCredentials = true;
+
+} 
+else{
+
+}
+
+
+if(response)
+{
+const name = data[0].name;
+const token = jwt.sign({name},"jwt-secret-key",{expiresIn: '1d'})
+res.cookie('token',token); 
+'token' it is a key and we have passed token in the cookie
+
+
+}
+else{
+
+
+}
+
+
+
+
+
+Certainly! Let's break down the code line by line:
+
+```javascript
+app.use(cors({
+  origin: ["https://example.com"], // The frontend URL will be placed inside the array
+  methods: ["POST", "GET"], // Only allow POST and GET requests
+  credentials: true // Allow sending credentials (like cookies) in the requests
+}));
+```
+
+1. `app.use(cors({ ... }))`: This line sets up the usage of the CORS middleware in an Express.js application. 
+CORS stands for Cross-Origin Resource Sharing, and it is a security feature implemented by web browsers to restrict web pages 
+from making requests to a different domain than the one that served the web page.
+
+2. `origin: ["https://example.com"]`: The `origin` field specifies the allowed origins (frontend URLs) that are permitted to make 
+cross-origin requests to the server. In this example, only requests from `https://example.com` will be allowed. If there are multiple 
+frontend URLs that should be allowed, you can add them to the array, like `origin: ["https://example.com", "https://another-frontend.com"]`.
+
+3. `methods: ["POST", "GET"]`: The `methods` field specifies the HTTP methods that the client-side (frontend) is allowed to use in 
+the cross-origin request. In this case, only `POST` and `GET` methods are allowed. You can add more methods as needed, like 
+`["POST", "GET", "PUT", "DELETE"]`.
+
+4. `credentials: true`: The `credentials` field indicates whether the client-side (frontend) is allowed to include credentials 
+(such as cookies, HTTP authentication, or client-side SSL certificates) in the cross-origin request. When set to `true`, it allows 
+credentials to be included in the request, and the server can handle these credentials securely. If set to `false`, credentials will 
+not be included in the request.
+
+By using the `cors` middleware with these configurations, the server will be able to accept cross-origin requests from the specified 
+frontend URL(s), allowing the frontend to interact with the server API seamlessly while maintaining appropriate security measures.
+
+
+
+
+
+
+
+Date:- 31/07/2023
+
+
+
+Sure, I can help you refactor the code into controllers and routers to improve its organization and maintainability. We'll create separate files for routes and controllers.
+
+
+Create a folder named controllers and create two files inside it: signupController.js and loginController.js.
+
+In the signupController.js file, add the following code:
+
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+const salt = 10; // Define the number of salt rounds for bcrypt
+
+exports.signup = (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.json({ Error: 'Error for hashing password' });
+    }
+
+    const values = [req.body.firstname, req.body.lastname, req.body.email, hash];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.json({ Error: 'Inserting data Error in server' });
+      }
+
+      return res.json({ Status: 'Success' });
+    });
+  });
+};
+
+
+
+
+
+In the loginController.js file, add the following code:
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+exports.login = (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ?';
+
+  // Check if 'email' and 'password' fields are present in the request body
+  if (!req.body.email || !req.body.password) {
+    return res.json({ Error: "Email and password fields are required." });
+  }
+
+  db.query(sql, [req.body.email], (err, data) => {
+    if (err) {
+      console.error('Error querying data:', err);
+      return res.json({ Error: "Login error in server" });
+    }
+
+    if (data.length > 0) {
+      bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+        if (err) {
+          console.error('Error comparing passwords:', err);
+          return res.json({ Error: "Password compare error" });
+        }
+
+        if (response) {
+          return res.json({ Status: "Success" });
+        } else {
+          return res.json({ Error: "Email or password incorrect" });
+        }
+      });
+    } else {
+      return res.json({ Error: "Email or password incorrect" });
+    }
+  });
+};
+
+
+
+
+Create a file named db.js in the root directory, and add the following code:
+
+
+const mysql = require('mysql');
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+module.exports = db;
+
+
+
+
+
+Now, create a file named routes.js in the root directory and add the following code:
+
+
+
+const express = require('express');
+const router = express.Router();
+
+const signupController = require('./controllers/signupController');
+const loginController = require('./controllers/loginController');
+
+router.post('/signup', signupController.signup);
+router.post('/login', loginController.login);
+
+module.exports = router;
+
+
+
+Finally, update your app.js (or the main entry point file) to use the routers:
+
+
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const routes = require('./routes');
+app.use('/', routes);
+
+app.listen(8081, () => {
+  console.log('listening');
+});
+
+
+
+Now your code is refactored into controllers and routers, making it more organized and easier to maintain. 
+The routes are separated 
+into individual files, and the database connection is placed in a separate file to be reused across controllers.
+
+
+
+
+
+
+
+Apologies for the confusion. You can create the `controllers` folder in the same directory as your `app.js` (or the main entry point file). The directory structure should look like this:
+
+```
+- Your_Project_Folder
+  - app.js (or the main entry point file)
+  - controllers
+    - signupController.js
+    - loginController.js
+  - db.js
+  - routes.js
+```
+
+The `controllers` folder will contain the two controller files: `signupController.js` and `loginController.js`. 
+These files will handle the logic for the `/signup` and `/login` routes, respectively.
+
+The `db.js` file will hold the database connection logic.
+
+The `routes.js` file will handle the routing and will import the controllers to associate them with the 
+appropriate routes.
+
+Please make sure to adjust the file paths in the code accordingly to match the actual location of your files. Once you have created the `controllers` folder and placed 
+the controller files inside it, you can follow the rest of the steps to refactor the code as described earlier.
+
+
+
+
+
+
+
+Apologies for the confusion in my previous response. You are right; there's no need to create a separate `router` folder. The typical practice is to keep the router file (`routes.js` in this case) in the same directory as the main entry point file (`app.js`).
+
+Here's the updated directory structure:
+
+```
+- Your_Project_Folder
+  - app.js (or the main entry point file)
+  - controllers
+    - signupController.js
+    - loginController.js
+  - db.js
+  - routes.js
+```
+
+The `routes.js` file will handle the routing and associate the routes with the appropriate controller functions. The `controllers` 
+folder will contain the two controller files: `signupController.js` and `loginController.js`, which will handle the 
+logic for the `/signup` and `/login` routes, respectively.
+
+To clarify, the `routes.js` file is essentially acting as the router, and you don't need to create an additional 
+folder for that purpose. You can keep everything in the same directory as mentioned in the updated directory 
+structure above.
+
+
+
+
+
+
+
+
+
+
+
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+const salt = 10; // Define the number of salt rounds for bcrypt
+
+exports.signup = (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.json({ Error: 'Error for hashing password' });
+    }
+
+    const values = [req.body.firstname, req.body.lastname, req.body.email, hash];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.json({ Error: 'Inserting data Error in server' });
+      }
+
+      return res.json({ Status: 'Success' });
+    });
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+Certainly! Let's go through the code line by line to understand what each part does:
+
+1. `const bcrypt = require('bcrypt');`
+   - This line imports the `bcrypt` library, which is used for hashing passwords securely.
+
+2. `const db = require('../db');`
+   - This line imports the MySQL database connection from the `db.js` file located one level up in the directory (`../` indicates going up one level).
+
+3. `const salt = 10;`
+   - This line sets the number of salt rounds for `bcrypt`. Salt rounds add randomness to the hashed password, making it more secure against potential attacks.
+
+4. `exports.signup = (req, res) => {`
+   - This line exports a function named `signup` as a part of the module. This function handles the logic for the `/signup` route.
+
+5. `const sql = 'INSERT INTO login (firstname, lastname, email, password) VALUES (?, ?, ?, ?)';`
+   - This line defines the SQL query that will insert a new user record into the `login` table. It uses placeholders (`?`) to avoid SQL injection and will later be replaced with actual values.
+
+6. `bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {`
+   - This line hashes the password received in the request body (`req.body.password`) using `bcrypt.hash()`. The hashed password will be more secure and will be stored in the database.
+
+7. `if (err) { ... }`
+   - If there's an error during the password hashing process, this block will be executed. It logs the error and sends a JSON response indicating the hashing error.
+
+8. `const values = [req.body.firstname, req.body.lastname, req.body.email, hash];`
+   - This line creates an array `values` that holds the user's first name, last name, email, and the hashed password. These values will be inserted into the SQL query in place of the placeholders.
+
+9. `db.query(sql, values, (err, result) => { ... });`
+   - This line executes the SQL query by calling `db.query()`. It passes the query string `sql` and the array of values `values` to the database. The result will contain information about the success or failure of the query.
+
+10. `if (err) { ... }`
+    - If there's an error during the database query (insertion of the new user), this block will be executed. It logs the error and sends a JSON response indicating the insertion error.
+
+11. `return res.json({ Status: 'Success' });`
+    - If the user is successfully inserted into the database, this line sends a JSON response indicating the success of the signup process.
+
+That's a summary of what each line does in the code. The `signup` function receives a POST request, hashes the password using `bcrypt`, inserts the new user into the database, and sends a response indicating success or any errors that might occur during the process.
+
+
+
+
+
+
+
+----------->
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+exports.login = (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ?';
+
+  // Check if 'email' and 'password' fields are present in the request body
+  if (!req.body.email || !req.body.password) {
+    return res.json({ Error: "Email and password fields are required." });
+  }
+
+  db.query(sql, [req.body.email], (err, data) => {
+    if (err) {
+      console.error('Error querying data:', err);
+      return res.json({ Error: "Login error in server" });
+    }
+
+    if (data.length > 0) {
+      bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+        if (err) {
+          console.error('Error comparing passwords:', err);
+          return res.json({ Error: "Password compare error" });
+        }
+
+        if (response) {
+          return res.json({ Status: "Success" });
+        } else {
+          return res.json({ Error: "Email or password incorrect" });
+        }
+      });
+    } else {
+      return res.json({ Error: "Email or password incorrect" });
+    }
+  });
+};
+
+
+
+explanation----------->
+
+
+
+Let's go through the code line by line to understand what each part does:
+
+1. `const bcrypt = require('bcrypt');`
+   - This line imports the `bcrypt` library, which is used for comparing passwords securely.
+
+2. `const db = require('../db');`
+   - This line imports the MySQL database connection from the `db.js` file located one level up in the directory (`../` indicates going up one level).
+
+3. `exports.login = (req, res) => {`
+   - This line exports a function named `login` as a part of the module. This function handles the logic for the `/login` route.
+
+4. `const sql = 'SELECT * FROM login WHERE email = ?';`
+   - This line defines the SQL query that will retrieve user information from the `login` table based on the provided email. It uses a placeholder (`?`) to avoid SQL injection, and the placeholder will later be replaced with the actual email value.
+
+5. `if (!req.body.email || !req.body.password) { ... }`
+   - This block checks if both `email` and `password` fields are present in the request body (`req.body`). If either of them is missing, it sends a JSON response indicating that both fields are required.
+
+6. `db.query(sql, [req.body.email], (err, data) => { ... });`
+   - This line executes the SQL query by calling `db.query()`. It passes the query string `sql` and an array containing the email value (`[req.body.email]`) to the database. The result will contain the user data or an empty array if no matching email is found.
+
+7. `if (err) { ... }`
+   - If there's an error during the database query (retrieval of user data), this block will be executed. It logs the error and sends a JSON response indicating a login error.
+
+8. `if (data.length > 0) { ... }`
+   - This block checks if there is at least one row of data returned by the database query (i.e., a user with the provided email exists).
+
+9. `bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => { ... });`
+   - This line compares the password received in the request body (`req.body.password`) with the hashed password stored in the database (`data[0].password`). It uses `bcrypt.compare()` to securely compare the two passwords.
+
+10. `if (err) { ... }`
+    - If there's an error during the password comparison, this block will be executed. It logs the error and sends a JSON response indicating a password compare error.
+
+11. `if (response) { ... }`
+    - If the password comparison is successful (i.e., the passwords match), this block will be executed. It sends a JSON response indicating that the login is successful.
+
+12. `else { ... }`
+    - If the passwords do not match, this block will be executed. It sends a JSON response indicating that the provided email or password is incorrect.
+
+That's a summary of what each line does in the code. The `login` function receives a POST request, checks if the required fields are present, retrieves the user data from the database based on the provided email, securely compares
+the passwords, and sends a response indicating the login status or any errors that might occur during the process.
+
+
+
+
+
+
+------------->
+
+const mysql = require('mysql');
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+module.exports = db;
+
+
+
+
+
+explanation------------>
+
+
+
+Certainly! Let's go through the code line by line to understand what each part does:
+
+1. `const mysql = require('mysql');`
+   - This line imports the `mysql` library, which provides an easy way to interact with MySQL databases in Node.js.
+
+2. `const db = mysql.createConnection({ ... });`
+   - This line creates a connection to the MySQL database using the `mysql.createConnection()` method. It takes an object containing the database connection parameters as an argument. The parameters include:
+     - `host`: The hostname of the database server (e.g., 'localhost' if the database is on the same machine).
+     - `user`: The MySQL user to authenticate as (e.g., 'root' in this case).
+     - `password`: The password of the MySQL user (an empty string in this case, assuming there is no password).
+     - `database`: The name of the MySQL database to use (e.g., 'signup' in this case).
+
+3. `db.connect((err) => { ... });`
+   - This line establishes the actual connection to the MySQL database by calling the `connect()` method on the `db` object. It takes a callback function as an argument, which will be called once the connection is established or if there is an error during the connection process.
+
+4. `if (err) { ... }`
+   - If there is an error during the database connection process, this block will be executed. It logs the error message to the console and exits the application.
+
+5. `console.log('Connected to the database');`
+   - If the database connection is successful, this line logs a message to the console indicating that the connection is established.
+
+6. `module.exports = db;`
+   - This line exports the `db` object, making it available for other files to use. This allows other parts of the application (like controllers) to access the database connection and perform queries using this connection.
+
+That's a summary of what each line does in the code. The code sets up a MySQL database connection and exports the connection object so that other parts of the application can use it to interact with the MySQL database.
+
+
+
+
+
+
+-------------------->
+
+
+
+const express = require('express');
+const router = express.Router();
+
+const signupController = require('./controllers/signupController');
+const loginController = require('./controllers/loginController');
+
+router.post('/signup', signupController.signup);
+router.post('/login', loginController.login);
+
+module.exports = router;
+
+
+
+
+
+
+Sure! Let's go through the code line by line to understand what each part does:
+
+1. `const express = require('express');`
+   - This line imports the `express` library, which is a popular web framework for Node.js. It allows us to create web applications and APIs easily.
+
+2. `const router = express.Router();`
+   - This line creates an instance of the Express Router, which is used to define routes for our application. The router allows us to group related routes together.
+
+3. `const signupController = require('./controllers/signupController');`
+   - This line imports the `signupController` object from the `./controllers/signupController.js` file. It will contain the logic for the `/signup` route.
+
+4. `const loginController = require('./controllers/loginController');`
+   - This line imports the `loginController` object from the `./controllers/loginController.js` file. It will contain the logic for the `/login` route.
+
+5. `router.post('/signup', signupController.signup);`
+   - This line defines a `POST` route for the path `/signup`. When a `POST` request is made to `/signup`, the `signupController.signup` function will be executed to handle the request. This means that the logic for the `/signup` route is defined in the `signupController.js` file.
+
+6. `router.post('/login', loginController.login);`
+   - This line defines a `POST` route for the path `/login`. When a `POST` request is made to `/login`, the `loginController.login` function will be executed to handle the request. This means that the logic for the `/login` route is defined in the `loginController.js` file.
+
+7. `module.exports = router;`
+   - This line exports the `router` object so that it can be used in other parts of the application. By exporting it, other files (like `app.js`, which is the main entry point of the application) can import this router and use it to define routes for the application.
+
+In summary, this code sets up an `express.Router()` instance, defines the `/signup` and `/login` routes, and associates each route with its respective controller function. The `router` object is then exported so that it can be used in the main application file (`app.js`) to set up the routes for the entire application.
+
+
+
+
+---------------------------->
+
+
+
+
+
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const routes = require('./routes');
+app.use('/', routes);
+
+app.listen(8081, () => {
+  console.log('listening');
+});
+
+
+
+
+
+--------------------->explanation
+
+
+
+
+
+
+
+
+Certainly! Let's go through the code line by line to understand what each part does:
+
+1. `const express = require('express');`
+   - This line imports the `express` library, which is a popular web framework for Node.js. It allows us to create web applications and APIs easily.
+
+2. `const cors = require('cors');`
+   - This line imports the `cors` library, which is used to handle Cross-Origin Resource Sharing (CORS) in the application. CORS is a security feature implemented by web browsers that prevents web pages from making requests to a different domain than the one that served the web page. By using `cors`, we can allow or restrict access to our API from different domains.
+
+3. `const app = express();`
+   - This line creates an instance of the Express application. The `app` object will be used to define routes, middleware, and other application settings.
+
+4. `app.use(cors());`
+   - This line sets up the `cors` middleware for the application. It allows all origins to access the API by default. You can configure specific options to restrict access if needed.
+
+5. `app.use(express.json());`
+   - This line sets up the `express.json()` middleware, which parses incoming JSON data from requests and makes it available in `req.body`. This allows the application to handle JSON data in request payloads.
+
+6. `const routes = require('./routes');`
+   - This line imports the router object defined in the `./routes.js` file. The router object contains the route definitions for the application.
+
+7. `app.use('/', routes);`
+   - This line sets up the routes defined in the `routes` object. The `app.use()` method mounts the `routes` object at the root level (`/`) of the application. It means that any request made to the application will be processed by the routes defined in `routes.js`.
+
+8. `app.listen(8081, () => { ... });`
+   - This line starts the Express application and makes it listen on port 8081. When the application is up and running, it will log "listening" to the console.
+
+In summary, this code sets up an Express application, enables CORS using the `cors` middleware, parses incoming JSON data using the `express.json()` middleware, sets up the routes defined in the `routes.js` file, and starts the application, making it listen on port 8081 for incoming requests.
+
+
+
+
+
+
+
+
+
+
+--------------> server.js--------------------->
+
+
+
+const express = require('express');
+const mysql = require('mysql');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+// const crypto = require('crypto');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+const salt= 10; // Define the number of salt rounds for bcrypt
+
+// ... (existing code above)
+
+app.post('/signup', (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.json({ Error: 'Error for hashing password' });
+    }
+
+    const values = [req.body.firstname, req.body.lastname, req.body.email, hash];
+    console.log("heyyyy i am value----------->" ,values,"<----------------------heyyyy i am value" )
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.json({ Error: 'Inserting data Error in server' });
+      }
+
+      return res.json({ Status: 'Success' });
+    });
+  });
+});
+
+
+
+app.post('/login', (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ?';
+
+
+  console.log("req.body.password---------------------------->",req.body.password,"<--------------------------req.body.password")
+  db.query(sql, [req.body.email], (err, data) => {
+    if (!req.body.email || !req.body.password) {
+          return res.json({ Error: "Email and password fields are required." });
+        }
+      
+              console.log("i am sqllll---------------->>>>", sql, "<----------------i am sqllll");
+              console.log("i am req.body.email---------------->>>>", req.body.email, "<----------------i am req.body.email");
+          
+              if (err) {
+                console.error('Error querying data:', err);
+                return res.json({ Error: "Login error in server" });
+              }
+          
+              if (data.length > 0) {
+                console.log("i am data.length---------------->>>>", data.length, "<----------------i am data.length");
+                console.log("i am data[0]---------------->>>>", data[0], "<----------------i am data[0]");
+                console.log("i am password---------------->>>>", req.body.password, "<----------------i am password");
+                console.log("i am password string---------------->>>>", req.body.password.toString(), "<----------------i am password");
+              
+            
+
+              
+                bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+                          console.log("i am responseeee---------------->>>>", response, "<----------------i am responseee"); // giving error
+                          console.log("i am req.body.password---------------->>>>", req.body.password, "<----------------i am req.body.password");
+                          console.log("i am data[0].password,---------------->>>>", data[0].password, "<----------------i am data[0].password,");
+                  
+                          if (err) return res.json({ Error: "Password compare error" });
+                  
+                          if (response) {
+                            return res.json({ Status: "Success" });
+                          } else {
+                            return res.json({ Error: "Password not matched" });
+                          }
+                        });
+                      } else {
+                        return res.json({ Error: "No email existed" });
+                      }
+                    });
+    
+  
+});
+
+
+
+
+app.listen(8081, () => {
+  console.log('listening');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Certainly! Let's go through the code line by line to understand what each part does:
+
+1. `const express = require('express');`
+   - This line imports the `express` library, which is a popular web framework for Node.js. It allows us to create web applications and APIs easily.
+
+2. `const mysql = require('mysql');`
+   - This line imports the `mysql` library, which is used to interact with the MySQL database.
+
+3. `const cors = require('cors');`
+   - This line imports the `cors` library, which is used to handle Cross-Origin Resource Sharing (CORS) in the application.
+
+4. `const app = express();`
+   - This line creates an instance of the Express application. The `app` object will be used to define routes, middleware, and other application settings.
+
+5. `app.use(cors());`
+   - This line sets up the `cors` middleware for the application. It allows all origins to access the API by default. You can configure specific options to restrict access if needed.
+
+6. `app.use(express.json());`
+   - This line sets up the `express.json()` middleware, which parses incoming JSON data from requests and makes it available in `req.body`. This allows the application to handle JSON data in request payloads.
+
+7. `const db = mysql.createConnection({ ... });`
+   - This code block creates a connection to the MySQL database. The `mysql.createConnection()` function is used to establish a connection to the database using the provided configuration parameters (host, user, password, and database name).
+
+8. `db.connect((err) => { ... });`
+   - This code block connects to the MySQL database using the `db` connection object. If there is an error connecting to the database, it will be logged to the console. If the connection is successful, it will log "Connected to the database" to the console.
+
+9. `const salt= 10;`
+   - This line defines the number of salt rounds for bcrypt. The `bcrypt` library uses salts to make the hash more secure.
+
+10. `app.post('/signup', (req, res) => { ... });`
+    - This block of code defines the route `/signup` for handling POST requests. When a POST request is made to `/signup`, the callback function inside the route will be executed.
+
+11. `bcrypt.hash(req.body.password.toString(), salt, (err, hash) => { ... });`
+    - This line uses `bcrypt` to hash the user's password provided in the request body. The hashed password will be stored securely in the database instead of storing the password as plain text.
+
+12. `const values = [req.body.firstname, req.body.lastname, req.body.email, hash];`
+    - This line creates an array `values` containing the user's first name, last name, email, and hashed password. This array will be used to insert data into the `login` table in the MySQL database.
+
+13. `db.query(sql, values, (err, result) => { ... });`
+    - This line executes an SQL query to insert the user's information (first name, last name, email, and hashed password) into the `login` table of the database. The `values` array is used as the parameter to insert the data into the corresponding placeholders in the SQL query.
+
+14. `app.post('/login', (req, res) => { ... });`
+    - This block of code defines the route `/login` for handling POST requests. When a POST request is made to `/login`, the callback function inside the route will be executed.
+
+15. `db.query(sql, [req.body.email], (err, data) => { ... });`
+    - This line executes an SQL query to retrieve data from the `login` table based on the provided email in the request body. The query will return the user's data with the corresponding email.
+
+16. `bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => { ... });`
+    - This line compares the password provided in the request body with the hashed password stored in the database for the given email. The `bcrypt.compare()` function will return a boolean `response` indicating whether the passwords match or not.
+
+17. Finally, the `app.listen(8081, () => { ... });` line starts the Express application and makes it listen on port 8081 for incoming requests.
+
+Overall, the code sets up an Express application, connects it to a MySQL database, defines routes for handling signup and login functionality, and uses bcrypt to securely store and compare passwords.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Notesss   suppose if i for tocken creation and logout and login Notesss
+
+
+
+
+
+in server.js file
+
+
+const express = require('express');
+const mysql = require('mysql');
+const cors = require('cors');
+const jwt  = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+
+const cookieParser  = require('cookie-parser')
+
+
+const app = express();
+
+app.use(cors(
+{
+origin: ["http://localhost:3000"],
+methods: ['POST', "GET"],
+credentials: true
+}
+
+));
+app.use(express.json());
+app.use(cookieParser());
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+const salt= 10; // Define the number of salt rounds for bcrypt
+
+// ... (existing code above)
+
+
+
+const verifyUser = (req,res,next) =>{
+
+const token = req.cookies.token;
+if(!token){
+
+  
+  return res.json({Error: "You are not authenticated"});
+}else{
+
+  console.log("heyyyyy i am tokennn --------->",token,"<--------------------heyyyyy i am tokennn" )
+  // console.log("heyyyyy i am tokennn --------->",jwt-secret-key,"<--------------------heyyyyy i am tokennn" )
+
+  jwt.verify(token,"jwt-secret-key",(err,decoded) =>{
+   if(err){
+
+    return res.json({Error: "Token is not okay"});
+   }
+   else{
+
+     req.name = decoded.name;
+     next();
+   }
+  })
+}
+
+}
+
+app.get('/', verifyUser, (req,res) =>{
+
+  return res.json({Status: "Success", name: req.name});
+
+
+})
+
+
+
+
+
+
+app.post('/signup', (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.json({ Error: 'Error for hashing password' });
+    }
+
+    const values = [req.body.firstname, req.body.lastname, req.body.email, hash];
+    console.log("heyyyy i am value----------->" ,values,"<----------------------heyyyy i am value" )
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.json({ Error: 'Inserting data Error in server' });
+      }
+
+      return res.json({ Status: 'Success' });
+    });
+  });
+});
+
+
+
+app.post('/login', (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ?';
+
+
+  console.log("req.body.password---------------------------->",req.body.password,"<--------------------------req.body.password")
+  db.query(sql, [req.body.email], (err, data) => {
+    if (!req.body.email || !req.body.password) {
+          return res.json({ Error: "Email and password fields are required." });
+        }
+      
+              console.log("i am sqllll---------------->>>>", sql, "<----------------i am sqllll");
+              console.log("i am req.body.email---------------->>>>", req.body.email, "<----------------i am req.body.email");
+          
+              if (err) {
+                console.error('Error querying data:', err);
+                return res.json({ Error: "Login error in server" });
+              }
+          
+              if (data.length > 0) {
+                console.log("i am data.length---------------->>>>", data.length, "<----------------i am data.length");
+                console.log("i am data[0]---------------->>>>", data[0], "<----------------i am data[0]");
+                console.log("i am password---------------->>>>", req.body.password, "<----------------i am password");
+                console.log("i am password string---------------->>>>", req.body.password.toString(), "<----------------i am password");
+              
+            
+
+              
+                bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+                          console.log("i am responseeee---------------->>>>", response, "<----------------i am responseee"); // giving error
+                          console.log("i am req.body.password---------------->>>>", req.body.password, "<----------------i am req.body.password");
+                          console.log("i am data[0].password,---------------->>>>", data[0].password, "<----------------i am data[0].password,");
+                  
+                          if (err) return res.json({ Error: "Password compare error" });
+                  
+                          if (response) {
+
+                            const name = data[0].name;
+                            const token = jwt.sign({name}, "jwt-secret-key", {expiresIn: '1d'});
+                            res.cookie('token', token);
+                            return res.json({ Status: "Success" });
+                          } else {
+                            return res.json({ Error: "Password not matched" });
+                          }
+                        });
+                      } else {
+                        return res.json({ Error: "No email existed" });
+                      }
+                    });
+    
+  
+});
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('token'); // Clear the cookie named 'token'
+  return res.json({ Status: "Success" });
+});
+
+
+
+
+
+app.listen(8081, () => {
+  console.log('listening');
+});
+
+
+
+
+
+
+
+//*****************************in the above i have used following codess****************************/
+
+
+const verifyUser = (req,res,next) =>{
+
+const token = req.cookies.token;
+if(!token){
+
+  
+  return res.json({Error: "You are not authenticated"});
+}else{
+
+  console.log("heyyyyy i am tokennn --------->",token,"<--------------------heyyyyy i am tokennn" )
+  // console.log("heyyyyy i am tokennn --------->",jwt-secret-key,"<--------------------heyyyyy i am tokennn" )
+
+  jwt.verify(token,"jwt-secret-key",(err,decoded) =>{
+   if(err){
+
+    return res.json({Error: "Token is not okay"});
+   }
+   else{
+
+     req.name = decoded.name;
+     next();
+   }
+  })
+}
+
+}
+
+app.get('/', verifyUser, (req,res) =>{
+
+  return res.json({Status: "Success", name: req.name});
+
+
+})
+
+
+
+
+
+
+
+
+///---------------------->>>>explanationnnnnnn<----------------------------------------------------
+
+
+
+
+const verifyUser = (req, res, next) => { ... }: This is a middleware function named verifyUser, which takes three parameters: req (request), res (response), and next (a function to call the next middleware or route handler).
+
+const token = req.cookies.token;: It retrieves the "token" value from the cookies attached to the request. The code assumes that there is a cookie named "token" that holds the authentication token.
+
+if (!token) { ... }: This checks if the "token" cookie is not present. If it's missing, it means the user is not authenticated, so the function immediately returns a JSON response with an error message stating, "You are not authenticated."
+
+else { ... }: If the "token" cookie is present, the code proceeds to the else block.
+
+console.log("heyyyyy i am tokennn --------->", token, "<--------------------heyyyyy i am tokennn");: This line logs the value of the "token" to the console. It can be useful for debugging purposes to see the token's value.
+
+jwt.verify(token, "jwt-secret-key", (err, decoded) => { ... });: This verifies the token using jwt.verify method. It takes the "token" to verify, the "jwt-secret-key" used for signing the token during authentication, and a callback function.
+
+(err, decoded) => { ... }: This is the callback function for jwt.verify, which receives any error (if verification fails) and the decoded payload (if verification is successful).
+
+if (err) { ... }: This checks if there was an error during token verification. If there's an error, it means the token is not valid, so the function returns a JSON response with an error message stating, "Token is not okay."
+
+else { ... }: If the token is successfully verified (no error), the code proceeds to the else block.
+
+req.name = decoded.name;: It sets the name property on the req (request) object to the name value decoded from the token payload. This makes the name available for subsequent middleware or route handlers.
+
+next();: This calls the next() function, which tells Express to continue with the next middleware or route handler. In this case, the next() function will lead to the app.get('/') route handler.
+
+Finally, in the app.get('/', verifyUser, (req, res) => { ... }); route, the verifyUser middleware is used before the route handler. If the verifyUser middleware successfully verifies the token and sets the req.name, it will proceed to the app.get('/') route handler, which returns a JSON response with the status "Success" and the user's name. If the verifyUser middleware encounters an error or the 
+"token" cookie is not present, it will return a JSON response with an error message indicating the issue.
+
+
+
+
+
+
+
+
+
+//***************************************************************************************
+
+
+
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('token'); // Clear the cookie named 'token'
+  return res.json({ Status: "Success" });
+});
+
+
+
+
+
+app.get('/logout', (req, res) => { ... });: This sets up a route in your Express application for the HTTP GET method with the path "/logout". When a client makes a GET request to this path, the function provided as the second argument (the route handler) will be executed.
+
+res.clearCookie('token');: This line clears the cookie named 'token' from the response. The response (res) object in Express provides a method clearCookie() to remove a cookie from the client's browser. When this code is executed, the 'token' cookie will be deleted.
+
+return res.json({ Status: "Success" });: After clearing the cookie, the server responds with a JSON object containing the property "Status" set to "Success." The res.json() method is used to send a JSON response back to the client. In this case, it's used to indicate that the logout was successful.
+
+So, when a client accesses the "/logout" route, the server will clear the "token" cookie, effectively logging the user out, and respond with a JSON object indicating the success of the logout process. After this response, the user's authentication session will be terminated as the token
+ cookie will be removed from the client's browser.
+
+
+
+
+
+
+
+
+
+
+######################another file #################################################
+
+
+
+Home.jsx
+
+
+
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+const Home = () => {
+  const [auth, setAuth] = useState(false);
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+
+  axios.defaults.withCredentials = true;
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8081")
+      .then((res) => {
+        if (res.data.Status === "Success") {
+          setAuth(true);
+          setName(res.data.name);
+        } else {
+          setAuth(false);
+          setMessage(res.data.Error);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setAuth(false);
+        setMessage("Error occurred while fetching data.");
+      });
+  }, []);
+
+  const handleDelete = () => {
+    axios
+      .get("http://localhost:8081/logout")
+      .then(() => {
+        setAuth(false); // Update the auth state to false to trigger the login view
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <div className="container mt-4">
+      {auth ? (
+        <div>
+          <h3>You are Authorized ------{name}</h3>
+          <button className="btn btn-danger" onClick={handleDelete}>
+            Logout
+          </button>
+        </div>
+      ) : (
+        <div>
+          <h3>Login Now</h3>
+          <h3>{message}</h3>
+          <Link to="/" className="btn btn-primary">
+            Login
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Home;
+
+
+
+
+
+
+
+
+*******************this above is declared as 
+
+
+
+<Route path = '/dashboard' element={<Home/> }></Route>
+
+in index.js fileee
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+
+
+These lines import the required modules: React, useEffect, and useState 
+from the "react" package, Link from "react-router-dom" for navigation, and axios for making HTTP requests.
+
+
+
+
+
+const Home = () => {
+  const [auth, setAuth] = useState(false);
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+
+
+
+Here, we define a functional component Home. It uses the useState hook to create three state variables:
+ auth, message, and name. The auth state keeps track of whether the user is authenticated or not 
+ (true or false). The message state holds any error messages encountered during data fetching.
+  The name state stores the user's name if they are authenticated.
+
+
+
+
+
+
+axios.defaults.withCredentials = true;
+
+
+
+This sets a default configuration for Axios to include credentials (cookies) in cross-origin requests. 
+It allows the server to receive and process cookies, which is important for maintaining user authentication.
+
+
+
+
+useEffect(() => {
+  axios
+    .get("http://localhost:8081")
+    .then((res) => {
+      if (res.data.Status === "Success") {
+        setAuth(true);
+        setName(res.data.name);
+      } else {
+        setAuth(false);
+        setMessage(res.data.Error);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      setAuth(false);
+      setMessage("Error occurred while fetching data.");
+    });
+}, []);
+
+
+
+
+
+
+
+const handleDelete = () => {
+  axios
+    .get("http://localhost:8081/logout")
+    .then(() => {
+      setAuth(false); // Update the auth state to false to trigger the login view
+    })
+    .catch((err) => console.log(err));
+};
+
+
+
+
+
+
+
+The handleDelete function is defined to handle the logout action. When the "Logout" button is clicked, this function is called. It makes an HTTP GET request to "http://localhost:8081/logout" to log the user out on the server-side. Upon successful logout, the then block is executed, and setAuth(false) is called to update the auth state to false, effectively triggering the login view.
+
+
+
+
+return (
+  <div className="container mt-4">
+    {auth ? (
+      <div>
+        <h3>You are Authorized ------{name}</h3>
+        <button className="btn btn-danger" onClick={handleDelete}>
+          Logout
+        </button>
+      </div>
+    ) : (
+      <div>
+        <h3>Login Now</h3>
+        <h3>{message}</h3>
+        <Link to="/" className="btn btn-primary">
+          Login
+        </Link>
+      </div>
+    )}
+  </div>
+);
+
+
+
+
+
+
+
+The return statement renders the component's content. If auth is true, it shows a welcome message with the user's name and a "Logout" button. Clicking the "Logout" button triggers the handleDelete function to log the user out. If auth is false, it displays a login prompt with the error message (if any) and a "Login" button. The "Login" button is a link to the login page, as specified by Link to="/".
+
+
+
+
+
+
+
+
+
+
+
+///explanation of above all--------------------->
+
+
+
+
+
+
+
+
+
+
+for Controller ---->> only for signupController, loginController both are present in controllers folder
+outside the controllers folder  aap.js , db.js  and routes.js files are present
+
+
+Like this:----
+
+
+Note:---- signupController.js and loginController.js  are 
+present in controllers folder
+
+
+
+
+
+loginController.jsx
+
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+exports.login = (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ?';
+
+  // Check if 'email' and 'password' fields are present in the request body
+  if (!req.body.email || !req.body.password) {
+    return res.json({ Error: "Email and password fields are required." });
+  }
+
+  db.query(sql, [req.body.email], (err, data) => {
+    if (err) {
+      console.error('Error querying data:', err);
+      return res.json({ Error: "Login error in server" });
+    }
+
+    if (data.length > 0) {
+
+        console.log("heyyyy i am req.body.password.toString()------------------> ",req.body.password.toString(),"<-------------------heyyyy i am req.body.password.toString()")
+      bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+        if (err) {
+          console.error('Error comparing passwords:', err);
+          return res.json({ Error: "Password compare error" });
+        }
+
+        if (response) {
+          return res.json({ Status: "Success" });
+        } else {
+          return res.json({ Error: "Email or password incorrect" });
+        }
+      });
+    } else {
+      return res.json({ Error: "Email or password incorrect" });
+    }
+  });
+};
+
+
+
+
+
+
+
+
+signupController.js
+
+
+
+
+
+
+
+const bcrypt = require('bcrypt');
+const db = require('../db'); // Import the MySQL database connection
+
+const salt = 10; // Define the number of salt rounds for bcrypt
+
+exports.signup = (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.json({ Error: 'Error for hashing password' });
+    }
+
+    const values = [req.body.firstname, req.body.lastname, req.body.email, hash];
+
+    console.log("heyyyyyyy i am value in signupController---------->",values,"<----------------------heyyyyyyy i am value signupController")
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.json({ Error: 'Inserting data Error in server' });
+      }
+
+      return res.json({ Status: 'Success' });
+    });
+  });
+};
+
+
+
+
+
+
+
+
+
+
+app.js
+
+
+
+
+
+
+
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const routes = require('./routes');
+app.use('/', routes);
+
+app.listen(8081, () => {
+  console.log('listening heeeeeyy');
+});
+
+
+
+
+
+
+
+db.js
+
+
+
+const mysql = require('mysql');
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database yyyyeeeee');
+});
+
+module.exports = db;
+
+
+
+
+
+
+
+routes.js file
+
+
+
+const express = require('express');
+const router = express.Router();
+
+const signupController = require('./controllers/signupController');
+const loginController = require('./controllers/loginController');
+
+router.post('/signup', signupController.signup);
+router.post('/login', loginController.login);
+(console.log("heyyyyy brroooo"));
+
+module.exports = router;
+
+
+
+
+
+
+
+---------------------->>>>>>> including logout ------------------------>>>>>>>
+
+
+
+
+
+Sure, let's create a separate controller and router file for the logout functionality.
+
+Create a folder named controllers in your project directory if it doesn't already exist.
+
+Inside the controllers folder, create a new file named logoutController.js.
+
+Add the following code to the logoutController.js file:
+
+controllers/logoutController.js
+
+
+
+
+
+const logout = (req, res) => {
+  res.clearCookie('token'); // Clear the cookie named 'token'
+  return res.json({ Status: "Success" });
+};
+
+module.exports = {
+  logout,
+};
+
+
+
+
+
+
+
+Now, create a folder named routes in your project directory if it doesn't already exist.
+
+Inside the routes folder, create a new file named logoutRoutes.js.
+
+Add the following code to the logoutRoutes.js file:
+
+
+
+
+
+const express = require('express');
+const router = express.Router();
+const logoutController = require('../controllers/logoutController');
+
+router.get('/logout', logoutController.logout);
+
+module.exports = router;
+
+
+
+
+Finally, modify your app.js file to use the logout route:
+
+
+
+const express = require('express');
+const mysql = require('mysql');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const logoutRoutes = require('./routes/logoutRoutes');
+
+const app = express();
+
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ['POST', 'GET'],
+  credentials: true
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+const salt = 10; // Define the number of salt rounds for bcrypt
+
+// ... (existing code above)
+
+const verifyUser = (req, res, next) => {
+  // Your verifyUser middleware code here
+  // ...
+};
+
+app.get('/', verifyUser, (req, res) => {
+  return res.json({ Status: "Success", name: req.name });
+});
+
+// Use logoutRoutes
+app.use('/', logoutRoutes);
+
+// ... (existing code below)
+
+app.listen(8081, () => {
+  console.log('listening');
+});
+
+
+
+With these changes, the /logout route will be handled by the logoutController defined in the logoutController.js 
+file. When a user accesses this route, the logout function will be executed,clearing the 'token' cookie and 
+responding with a "Success" status. This effectively logs the user out of the system.
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

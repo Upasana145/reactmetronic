@@ -1,0 +1,227 @@
+index.js
+
+
+
+import React from "react";
+import ReactDOM from "react-dom";
+import Card from "./Cards";
+import "./index.css";
+import Sdata from './Sdata';
+console.log(Sdata[0].imgs);
+
+ReactDOM.render(
+    <>
+    <h1 className =" heading ">List of 5 netflix series</h1>
+<Card 
+     className = "upasana"
+     imgs = {Sdata[0].imgs}
+     title = {Sdata[0].title}
+     sname = {Sdata[0].sname}
+     link = {Sdata[0].link}
+
+/> 
+<Card 
+       imgs = {Sdata[1].imgs}
+       title = {Sdata[1].title}
+       sname = {Sdata[1].sname}
+       link = {Sdata[1].link}
+
+/> 
+<Card 
+       imgs = {Sdata[2].imgs}
+       title = {Sdata[2].title}
+       sname = {Sdata[2].sname}
+       link = {Sdata[2].link}
+
+/> 
+</> // khud ka custome element create kye component bana ke 
+,document.getElementById("root")
+);
+
+
+// props ka mtlb hota hai properties agar hmko khud ka custome attribute create karna hai to hm props use karte hai 
+
+// class ek reserved key wordhai react me isilye hm class use ni kar skte instead of it hm className use karte hai
+
+
+//  jm jo kch v likhe react component i.e <Card .... /> ke ander wo hamesha custome attribute hi khelayega i.e ClassName v ek costume attribute hi hai
+// even wo css me defined h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sdata.jsx
+
+
+
+// Array of element and her ek array of element me ek object pass kar rhe hu
+
+
+const Sdata=[
+{
+    sname : "DARK",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series" ,
+    link : "https://www.google.com/",
+
+},
+{
+    sname : "COOL",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series" ,
+    link : "https://www.google.com/",
+
+},
+{
+    sname : "NGINX",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series" ,
+    link : "https://www.google.com/",
+
+},
+
+]
+export default Sdata;
+
+
+
+This code defines an array called Sdata that contains multiple objects. Each object represents data for a 
+specific item. In this case, the objects represent Netflix series. Each object has properties such 
+as sname (series name), imgs (image URL), title (series title), and link (link to more information about the series).
+
+
+
+
+
+
+This line exports the Sdata array as the default export of the module. It allows other files to import and 
+use the Sdata array by importing it as a named import or using the default import syntax.
+
+In summary, the code creates an array of objects, where each object represents data for a Netflix series.
+ The exported Sdata array can be imported into other files to access and use the data stored within it.
+
+
+
+
+
+
+
+Card.jsx
+
+
+
+
+
+function Card(props){
+    // console.log(props)
+    return (<>
+    <div className="Cards">
+        <div className="card">
+            {/* <img src="https://picsum.photos/200/300" alt="mypicoo" className="card__img"/> */}
+            <img src={props.imgs} alt="mypicoo" className="card__img"/>
+             <div className="card__info">
+             <span className="card__catagory">{props.title}</span>
+             <h3 className="card__title">{props.className}</h3>
+              {/* <a href="https://www.google.com/" target = "_blank"> */}
+              <a href={props.link} target = "_blank">
+                <button> Watch Now </button>
+              </a>
+    
+            </div>
+    
+        </div>
+        
+    </div>
+    <input type="text" value = "thapa"/>
+    </>);
+}
+export default Card;
+
+
+
+
+
+
+
+
+
+Certainly! Let's go through the code line by line:
+
+1. `function Card(props) {`: This line defines a functional component called `Card` that accepts `props` as its parameter. The `props` parameter is an object containing the properties passed to the component.
+
+2. `return (<> ... </>);`: This is the return statement of the component, which returns the JSX (JavaScript XML) code enclosed within the empty fragment tags (`<> ... </>`). JSX allows you to write HTML-like code within JavaScript.
+
+3. `<div className="Cards">`: This is a `div` element with a `className` attribute set to "Cards". The `className` attribute is used to assign CSS classes to the element for styling purposes.
+
+4. `<div className="card">`: Another `div` element with a `className` attribute set to "card".
+
+5. `<img src={props.imgs} alt="mypicoo" className="card__img"/>`: An `img` element is used to display an image. The `src` attribute is set to the value of `props.imgs`, which is passed as a prop to the `Card` component. The `alt` attribute specifies alternative text for the image. The `className` attribute assigns the CSS class "card__img" to the image element.
+
+6. `<div className="card__info">`: Another `div` element with a `className` attribute set to "card__info".
+
+7. `<span className="card__catagory">{props.title}</span>`: A `span` element is used to display the value of `props.title`, which represents the category of the card. The `className` attribute assigns the CSS class "card__catagory" to the `span` element.
+
+8. `<h3 className="card__title">{props.className}</h3>`: An `h3` element is used to display the value of `props.className`, which represents the title of the card. The `className` attribute assigns the CSS class "card__title" to the `h3` element.
+
+9. `<a href={props.link} target="_blank">`: An `a` element is used to create a hyperlink. The `href` attribute is set to the value of `props.link`, which represents the URL the link should navigate to. The `target="_blank"` attribute ensures that the link opens in a new browser tab or window.
+
+10. `<button> Watch Now </button>`: A `button` element with the text "Watch Now" inside.
+
+11. `</a>`: Closing tag for the `a` element.
+
+12. `</div>`: Closing tag for the `div` element with the class "card__info".
+
+13. `</div>`: Closing tag for the `div` element with the class "card".
+
+14. `</div>`: Closing tag for the `div` element with the class "Cards".
+
+15. `<input type="text" value="thapa"/>`: An `input` element of type "text" with a default value of "thapa".
+
+16. `);`: Closing parenthesis for the `return` statement.
+
+17. `export default Card;`: This line exports the `Card` component as the default export of the module, allowing it to be imported and used in other files.
+
+This code defines a reusable React component called `Card` that displays an image, title, category, and a button with a hyperlink. The values for these elements are passed as props to the component.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

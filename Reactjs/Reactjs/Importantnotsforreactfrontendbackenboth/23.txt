@@ -1,0 +1,14 @@
+The map() method create a new array with the result of a calling function for every array element.
+The map() method calls the provider function once for each element in as array , in order.
+Syntax:
+
+array.map(function(currentValue , index, arr), thisValue)
+
+
+Argument                          Description
+currentValue                      Required the value of current element
+index optional                    The array index of current element
+arr optional                      The array object of current element belongs to.
+
+
+

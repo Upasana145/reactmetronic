@@ -1,0 +1,33 @@
+Lecture 18 thapa technical
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+let currdate = new Date();
+currdate = currdate.getHours();
+let greeting = ' ';
+const cssStyle  = {};
+if(currdate>=1 && currdate <=12)
+{
+  greeting = 'Morning';
+  cssStyle.color = 'green';
+}
+else if(currdate>=12 && currdate <= 17)
+{
+  greeting = 'Afternoon';
+  cssStyle.color = 'red';
+}
+else
+{
+  greeting = 'Evening';
+  cssStyle.color = 'purple';
+}
+
+ReactDOM.render(
+<>
+<h1>Hello sir , Good  <span style = {cssStyle} > {greeting} </span> </h1>
+</>,
+document.getElementById("root")
+);

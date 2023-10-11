@@ -1,0 +1,203 @@
+const express = require("express")
+const app = express();
+
+const PORT = process.env.PORT || 5000;
+app.get("/radha", (req,res)=>{
+
+res.send("Hi , i am  live");
+
+});
+
+
+const start  = async () =>{
+try{
+
+// app.listen(port,hostname, backlog);  this is how we have to write
+app.listen(PORT, ()=>{
+console.log(`${PORT} YES I AM CONNECTED`);
+});
+
+}
+catch(error){
+    console.log("error");
+}
+
+}
+
+
+start();
+
+
+
+
+
+
+
+
+
+
+
+
+Sure! Let's go through the code line by line:
+
+1. `const express = require("express")`: This line imports the `express` library, which is a popular 
+web framework for Node.js. It allows you to create a server and define routes for handling HTTP requests.
+
+2. `const app = express();`: This creates an instance of the `express` application. `app` is used to 
+configure the server and define routes.
+
+3. `const PORT = process.env.PORT || 5000;`: This line sets the port number for the server. It uses the environment 
+variable `PORT`, if it exists, otherwise, it defaults to port 5000.
+
+4. `app.get("/radha", (req, res) => { ... });`: This is a route definition. It sets up a GET request route for the 
+path `/radha`. When a client (e.g., a web browser) sends a GET request to `/radha`, the callback function 
+`(req, res) => { ... }` will be executed.
+
+5. `(req, res) => { ... }`: This is the callback function that gets executed when a GET request is made to the 
+`/radha` route. It takes two arguments, `req` (request) and `res` (response), representing the incoming request
+ and the outgoing response, respectively.
+
+6. `res.send("Hi , i am  live");`: Inside the callback function, this line sends the response back to the client 
+with the message "Hi, I am live." The `res.send()` method sends a simple HTTP response (in this case, a string) 
+to the client.
+
+7. `const start = async () => { ... }`: This is an asynchronous function named `start`, which is used to start 
+the server.
+
+8. `try { ... } catch (error) { ... }`: This is a try-catch block that handles errors if they occur during the
+ server startup.
+
+9. `app.listen(PORT, () => { ... });`: This line starts the server to listen on the specified port (`PORT`). When 
+the server starts successfully, the callback function `(req, res) => { ... }` is executed, and it logs the message 
+`${PORT} YES I AM CONNECTED` to the console.
+
+10. `start();`: This line calls the `start` function to start the server and handle any errors that may occur during
+ startup.
+
+In summary, this code sets up a simple Express server that listens on a specified port (either the environment 
+variable `PORT` or port 5000). When a GET request is made to the `/radha` route, the server sends the response 
+"Hi, I am live" back to the client. The server startup process is handled by the `start` function, which logs
+ a message to the console when the server is successfully started.
+
+
+
+
+
+
+
+Reactjs\my-app\app.js
+
+const express = require("express")
+const app = express();
+const product_routes = require("./routes/product")
+
+const PORT = process.env.PORT || 5000;
+// app.get("/radha", (req,res)=>{
+
+// res.send("Hi , i am  live");
+
+
+// });
+
+
+//middleware or to set router
+
+app.use("/api/product",product_routes)
+
+
+
+const start  = async () =>{
+try{
+
+// app.listen(port,hostname, backlog);  this is how we have to write
+app.listen(PORT, ()=>{
+console.log(`${PORT} YES I AM CONNECTED`);
+});
+
+}
+catch(error){
+    console.log("error");
+}
+
+}
+
+
+start();
+
+
+
+
+
+
+
+
+
+
+
+Certainly! Let's go through the code line by line:
+
+1. `const express = require("express")`: This line imports the `express` library, which is a popular web framework for Node.js. It allows you to create a server and define routes for handling HTTP requests.
+
+2. `const app = express();`: This creates an instance of the `express` application. `app` is used to configure the server and define routes.
+
+3. `const product_routes = require("./routes/product")`: This line imports the `product_routes` module, which contains the routes for handling product-related functionality. The module is assumed to be located in the `./routes/product.js` file.
+
+4. `const PORT = process.env.PORT || 5000;`: This line sets the port number for the server. It uses the environment variable `PORT`, if it exists, otherwise, it defaults to port 5000.
+
+5. `app.use("/api/product", product_routes)`: This line sets up a middleware to handle requests with the base path `/api/product`. It means that any incoming request that starts with `/api/product` will be forwarded to the `product_routes` for further handling.
+
+6. `const start = async () => { ... }`: This is an asynchronous function named `start`, which is used to start the server.
+
+7. `try { ... } catch (error) { ... }`: This is a try-catch block that handles errors if they occur during the server startup.
+
+8. `app.listen(PORT, () => { ... });`: This line starts the server to listen on the specified port (`PORT`). When the server starts successfully, the callback function `(req, res) => { ... }` is executed, and it logs the message `${PORT} YES I AM CONNECTED` to the console.
+
+9. `start();`: This line calls the `start` function to start the server and handle any errors that may occur during startup.
+
+In summary, this code sets up an Express server with a base route `/api/product`. Any request that starts with `/api/product` will be forwarded to the `product_routes` module, which contains the routes for product-related functionality (e.g., creating, updating, or fetching products). The server listens on a specified port, and when it successfully starts, it logs a message to the console. The application is designed to handle product-related operations through the `product_routes` module.
+
+
+
+
+
+
+
+
+my-app\routes\product.js
+
+
+my-app\controller\product.js
+
+
+const express  = require("express")
+const router = express.Router();
+const {getAllProducts, getAllProductsTesting} = require("../controller/product")
+
+router.route("/").get(getAllProducts);
+router.route("/testing").get(getAllProductsTesting);
+
+
+
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

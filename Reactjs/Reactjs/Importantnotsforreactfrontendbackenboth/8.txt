@@ -1,0 +1,44 @@
+
+tutorial ---> 10 thapa techbnical
+
+import React from "react";
+import  ReactDOM  from "react-dom";
+
+const flname = " upasana bharti ";
+
+ReactDOM.render(
+  <>
+  <h1>Hellloooooo  {flname}</h1>
+  <h1>Hellloooooo 2 + 3</h1>
+  <h1>Hellloooooo{2+3}</h1>
+  </>
+,
+document.getElementById("root")
+);
+
+
+// we can only use expression inside { } we can't use Statement like----> 
+// <h1>
+// {
+//   if(3>4){
+//     console.log("true");
+//   }
+//   else
+//   {
+//     console.log("false");
+//   }
+//   }
+  
+//     </h1>
+  
+  
+
+
+
+hm javascript ke ander----> html use karte h to usse jsx bolte h ---> fir agar hm javascript use karna chahte h html ke 
+ander to hm curly bracket ke ander likhnge
+
+
+
+
+

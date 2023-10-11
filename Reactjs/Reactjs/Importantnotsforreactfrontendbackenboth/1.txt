@@ -1,0 +1,30 @@
+
+node.js install
+Why?
+
+hm chahte hai ki javascript ko without brower use kare isiliye hm node js ko install kar rhe h
+
+
+node and npm version
+
+node --version
+npm -version
+
+react dev tool -> ye ek chrome extension hai  or isko maine install kia
+
+
+thunder client ----> ye alternative hai postman ka  
+thunder client ek visual studio code ki extension hai jo ki
+get post and apni api ko test karne ki luxury pradan karti hai
+ES7 React/Redux/GraphQL/React-Native snippets
+Bracket Pair Color DLW
+live server extension
+Prettier - Code formatter
+
+
+hmareproject ke jitne v information hai wo package.json file store karta hai infact jite v meta data hai wo package.json file store karta hai
+
+dir--> to view all the directory as myapp
+cd myapp
+npm start
+then it will run at localhosts: 3000

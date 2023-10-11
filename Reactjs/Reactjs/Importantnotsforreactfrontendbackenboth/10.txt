@@ -1,0 +1,29 @@
+Lecture 12 thapa technical
+
+Create a react app from scratch
+Add one h1 element ex. name
+add one p element
+add current date and current time
+
+
+import React from "react";
+import  ReactDOM  from "react-dom";
+
+const currDate = new Date().toLocaleDateString();
+const currTime = new Date().toLocaleTimeString();
+
+const lname = "bharti";
+
+
+ReactDOM.render(
+  <>
+   <h1>{`Local date ${currDate}`}</h1>
+   <h1>{`Local date ${currTime}`}</h1>
+   <h1>{`Local date ${lname}`}</h1>
+
+  </>
+,
+document.getElementById("root")
+);
+
+

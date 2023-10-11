@@ -1,0 +1,92 @@
+
+tutorial 20 thapa technical
+
+index.js part
+
+
+//  relative path convension --->./
+
+// import React from "react";
+// import ReactDOM from "react-dom";
+// import youtuber, { favprog ,cool, coolhai} from "./Appp";
+
+
+
+// ReactDOM.render(
+//     <>
+//     <ol>
+//          <li>  Thapa Technical</li>
+//          <li>  {youtuber} </li>
+//          <li> {favprog} </li>
+//          <li> {cool()} </li>
+//          <li> {coolhai()} </li>
+
+
+
+//     </ol>   
+//     </>
+//     , document.getElementById("root")
+// );
+
+
+
+
+
+//we can import everything as an object using import * as<obj> , for instance
+
+
+
+
+import React from "react";
+import ReactDOM from "react-dom";
+// import youtuber, { favprog ,cool, coolhai} from "./Appp";
+import * as ques from "./Appp";
+
+
+
+ReactDOM.render(
+    <>
+    <ol>
+         <li>  Thapa Technical</li>
+         <li>  {ques.default} </li>
+         <li> {ques.favprog} </li>
+         <li> {ques.cool()} </li>
+         <li> {ques.coolhai()} </li>
+
+
+
+    </ol>   
+    </>
+    , document.getElementById("root")
+);
+
+
+
+// you can do it you are doing best uppu you are best 
+// your logic is clear, your memories are sharp, your are confident,you are good communicator 
+
+
+Appp.jsx
+
+
+const youtuber = "thapa technical  11000";
+const favprog = "my program";
+function cool()
+{
+    return <h1>kya cool hai hm</h1>
+}
+function coolhai()
+{
+    return <h1>kya cool hai hm</h1>
+}
+
+export default youtuber;
+export {favprog, cool, coolhai};
+
+
+
+
+
+
+
+

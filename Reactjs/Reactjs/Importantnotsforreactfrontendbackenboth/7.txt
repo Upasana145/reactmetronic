@@ -1,0 +1,26 @@
+thapa technical---> tutorial 9
+JSX chalenge
+
+1. Create one react app from scratch
+2. Add one h1 element in in
+3.Add one p element in it.
+4.add list of 5 netflix element using an ordered list
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+ReactDOM.render(
+<>
+<h1>Netflix Series </h1>
+<p>List of 5 best series</p>
+<ol>
+  <li>Dark</li>
+  <li>Dark2</li>
+  <li>Dark3</li>
+  <li>Dark4</li>
+  <li>Dark5</li>
+</ol>
+
+</>,
+
+document.getElementById("root"));

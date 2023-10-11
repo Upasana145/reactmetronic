@@ -1,0 +1,33 @@
+//react hooks
+
+
+
+
+import React, { useState } from "react";
+
+
+
+
+
+const App = ()=>
+{
+    let time = new Date().toLocaleTimeString();
+    const [click, settime] = useState(time);
+
+    const Incme = () =>
+    {
+      time = new Date().toLocaleTimeString();
+       settime(time);
+       console.log("cool"); 
+
+    }
+
+    return (
+<>
+<h1>{click}</h1>
+<button className="Click" onClick={Incme}>CLICKME</button>
+
+</>
+    );
+}
+export default App;

@@ -1,0 +1,23 @@
+import React from "react";
+import  ReactDOM  from "react-dom";
+import "./index.css";
+
+const name = "upasana";
+const img1 = "https://picsum.photos/seed/picsum/200/300";
+const img2 = "https://picsum.photos/seed/picsum/204/500";
+const img3 = "https://picsum.photos/seed/picsum/205/400";
+const links = "https://www.youtube.com/watch?v=OloAP8p1k1w";
+
+ReactDOM.render(
+  <>
+   <h1 className = "heading">My name is {name} </h1>
+    <img src = {img1}  alt = "randomimage" />
+    <img src = {img2}  alt = "randomimage" />
+    <a href={links} target ="_blank"><img src = {img3}  alt = "randomimage" /></a>
+  </>
+,
+document.getElementById("root")
+);
+
+
+// class is reserved keyword in react, in jsx we use className

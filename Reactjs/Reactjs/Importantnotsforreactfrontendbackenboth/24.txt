@@ -1,0 +1,38 @@
+tutorial :- 24 by thapa techbnical
+
+
+<p id = "myid" > </p>
+<script>
+    // const olderr = ['Binod', 'Badhur', 'Thapa'];
+    // console.log(olderr[0]);
+    // console.log(olderr[1]);
+    // console.log(olderr[2]);
+
+    // const newarr = olderr.map(function(cvalue,i){
+    //     return i +":" + cvalue;
+    // });
+    // console.log(newarr);
+
+  
+const studentdata = [{id : 23, name: "upasana" } , { id : 24, name: "upasana33" },{ id : 35 , name :"pppppp"},]
+// console.log(studentdata[0].id);
+
+// const studata = studentdata.map(function(cvalue){
+// return cvalue;
+// })
+// console.log(studata.id);
+
+
+const studata = studentdata.map((cvalue) =>{
+return `my name is ${cvalue.name} and my ID is ${cvalue.id}`;
+});
+console.log(studata);
+
+document.getElementById("myid").innerHTML  = studata;
+
+
+
+
+
+
+</script>

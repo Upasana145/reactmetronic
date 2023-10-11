@@ -1,0 +1,161 @@
+Props Components attributes
+
+props get passed to the component (similar to function parameters)
+whereas state is managed within the component (similar to variables declared within a function).
+
+$0  ye ek object hai 
+
+
+Cards.jsx
+
+function Card(props){
+    console.log(props)
+    return (<>
+    <div className="Cards">
+        <div className="card">
+            {/* <img src="https://picsum.photos/200/300" alt="mypicoo" className="card__img"/> */}
+            <img src={props.imgs} alt="mypicoo" className="card__img"/>
+             <div className="card__info">
+             <span className="card__catagory">{props.title}</span>
+             <h3 className="card__title">{props.sname}</h3>
+              {/* <a href="https://www.google.com/" target = "_blank"> */}
+              <a href={props.link} target = "_blank">
+                <button> Watch Now </button>
+              </a>
+    
+            </div>
+    
+        </div>
+        
+    </div>
+    <input type="text" value = "thapa"/>
+    </>);
+}
+export default Card;
+
+
+
+Certainly! I'll explain the code line by line:
+
+1. `function Card(props) {`: This line defines a function component called `Card` that accepts `props` as its parameter.
+
+2. `console.log(props)`: This line logs the value of the `props` object to the console. It can be used to check the 
+values being passed to the component.
+
+3. `return (<> ... </>);`: This is the return statement of the component, which returns the JSX (JavaScript XML)
+ code enclosed within the empty fragment tags (`<> ... </>`). JSX is a syntax extension for JavaScript that 
+ allows you to write HTML-like code within JavaScript.
+
+4. `<div className="Cards">`: This is a `div` element with a `className` attribute set to "Cards".
+ The `className` attribute is used to assign CSS classes to the element for styling purposes.
+
+5. `<div className="card">`: Another `div` element with a `className` attribute set to "card".
+ The `src` attribute is set to the value of `props.imgs`, which is passed as a prop to the `Card` component.
+  The `alt` attribute specifies alternative text for the image. The `className` attribute assigns the CSS class "card__img" to the image element.
+
+7. `<div className="card__info">`: Another `div` element with a `className` attribute set to "card__info".
+
+8. `<span className="card__category">{props.title}</span>`: A `span` element is used to display the value of 
+`props.title`, which represents the category of the card. The `className` attribute assigns the CSS class 
+"card__category" to the `span` element.
+
+9. `<h3 className="card__title">{props.sname}</h3>`: An `h3` element is used to display the value of `props.sname`, 
+which represents the title of the card. The `className` attribute assigns the CSS class "card__title"
+ to the `h3` element.
+
+10. `<a href={props.link} target="_blank">`: An `a` element is used to create a hyperlink. 
+The `href` attribute is set to the value of `props.link`, which represents the URL the link
+ should navigate to. The `target="_blank"` attribute ensures that the link opens in a new browser tab or window.
+
+11. `<button> Watch Now </button>`: A `button` element with the text "Watch Now" inside.
+
+12. `</a>`: Closing tag for the `a` element.
+
+13. `</div>`: Closing tag for the `div` element with the class "card__info".
+
+14. `</div>`: Closing tag for the `div` element with the class "card".
+
+15. `</div>`: Closing tag for the `div` element with the class "Cards".
+
+16. `<input type="text" value="thapa"/>`: An `input` element of type "text" with a default value of "thapa".
+
+17. `);`: Closing parenthesis for the `return` statement.
+
+18. `export default Card;`: This line exports the `Card` component as the default export of the module, allowing it to
+ be imported and used in other files.
+
+This code defines a reusable React component called `Card` that displays an image,
+ title, category, and a button with a hyperlink. The values for these elements are passed as props to the component.
+
+
+
+
+
+index.js 
+
+import React from "react";
+import ReactDOM from "react-dom";
+import Card from "./Cards";
+
+
+ReactDOM.render(
+    <>
+    
+<Card 
+     imgs = "https://picsum.photos/200/300"
+     title = " A netflix series"
+     sname = "DARK"
+     link = "https://www.google.com/"
+
+/> 
+<Card/>
+</> // khud ka custome element create kye component bana ke 
+,document.getElementById("root")
+);
+
+
+// props ka mtlb hota hai properties agar hmko khud ka custome attribute create karna hai to hm props use karte hai 
+
+
+
+
+
+Certainly! Let's go through the code line by line:
+
+1. `import React from "react";`: This line imports the `React` library, which is necessary to write and
+   define React components.
+
+2. `import ReactDOM from "react-dom";`: This line imports the `ReactDOM` library, which is 
+   responsible for rendering React components in the browser.
+
+3. `import Card from "./Cards";`: This line imports the `Card` component from the "./Cards" file.
+ The "./" notation specifies that the file is in the same directory as the current file.
+
+4. `ReactDOM.render(<> ... </>, document.getElementById("root"));`: This is the entry point of the 
+application where the rendering of React components begins.
+ The `ReactDOM.render()` function is called with two parameters: the JSX code to be rendered,
+ and the DOM element with the id "root" where the rendering will occur.
+
+5. `<> ... </>`: This is an empty JSX fragment used as a wrapper for multiple components.
+It allows multiple components to be rendered without the need for an additional parent element.
+
+6. `<Card ... />`: This is the usage of the `Card` component. It is a self-closing tag that represents
+an instance of the `Card` component. Inside the opening tag, various props are provided to configure the component's 
+behavior and content. In this example, the `imgs`, `title`, `sname`, and `link` props are passed with their 
+corresponding values.
+
+7. `<Card/>`: Another usage of the `Card` component without any props provided.
+ This is used to demonstrate that the `Card` component can be used multiple times with different configurations.
+
+8. `, document.getElementById("root")`: This specifies the target DOM element with the id "root" 
+where the JSX code will be rendered.
+
+9. `// props ka mtlb hota hai properties agar hmko khud ka custom attribute create karna hai to hm props use karte hai`:
+ This is a comment explaining that "props" stands for properties, and it is used to pass data and configuration to 
+ components. It also mentions that if you want to create a custom attribute, you can use props to achieve that.
+
+The code sets up a React application that renders two instances of the `Card` component, each with 
+different props. The `Card` component is imported from another file, and the rendering occurs in the HTML 
+element with the id "root". The usage of props allows customization and configuration of the `Card`
+component's behavior and content.
+

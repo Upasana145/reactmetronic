@@ -1,0 +1,50 @@
+
+Lecture number 21 
+
+
+index.js
+
+import React from "react";
+import ReactDOM from "react-dom";
+import add ,{sub, div} from "./Appp";
+ReactDOM.render(
+<>
+<ol>
+    <li>The sum of two number is {add(8,100)}</li>
+    <li>The sub of two number is {sub(100,8)}</li>
+    <li>The sub of two number is {div(8,100)}</li>
+
+</ol>
+</>
+, document.getElementById("root")
+);
+
+
+
+Appp.jsx
+
+import React from "react";
+function add(a,b)
+{
+
+    const sum =  a+b;
+    return sum;
+}
+
+function sub(a,b)
+{
+
+    const sub =  a-b;
+    return sub;
+}
+
+function div(a,b)
+{
+
+    const div =  a/b;
+    return div.toFixed(3);
+}
+export default add;
+export {sub,div};
+
+

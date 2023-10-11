@@ -1,0 +1,39 @@
+tut->7 thapa technical
+
+
+
+agar hmko multiple jsx elements ko use karna hai to hm div keyword ka use karnge 
+or agar react ka version 16.x.x se uper rha to hm array of elements [] ka  use karnge 
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+
+ReactDOM.render(
+[
+<h1>Hello world </h1>,
+<p>Subscribe my channel coooolllls </p>
+],
+document.getElementById("root"));
+
+above method hum use karnge tb jb react ka version 16.x.x se jyada hoga
+
+
+2nd way
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+
+ReactDOM.render(
+<div>
+<h1>Hello world </h1>
+<p>Subscribe my channel </p>
+</div>,
+document.getElementById("root"));
+
+
+

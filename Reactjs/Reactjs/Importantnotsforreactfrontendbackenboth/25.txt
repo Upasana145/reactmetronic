@@ -1,0 +1,241 @@
+React developer tool\
+
+
+--->
+
+
+
+
+<card
+key = "1"
+sname = "upasana"
+/>
+
+key is not consider as prop present inside the card  to check this you should go to console-> components
+components will only visible if the react developer tool is installed in your system
+
+
+************************************************lecture:- 26 if else by thapa technical**********************************************************************
+
+if (){
+
+}
+else {
+
+}
+
+
+
+
+
+
+
+
+index.js
+
+
+
+import React from "react";
+import ReactDOM from "react-dom";
+import Card from "./Cards";
+import "./index.css";
+import Sdata from './Sdata';
+import Appp from './Appp';
+
+
+// console.log(Sdata[0].imgs);
+
+ReactDOM.render(
+<Appp/> // khud ka custome element create kye component bana ke 
+,document.getElementById("root")
+);
+
+
+// props ka mtlb hota hai properties agar hmko khud ka custome attribute create karna hai to hm props use karte hai 
+
+// class ek reserved keyword hai react me isilye hm class use ni kar skte instead of it hm className use karte hai
+
+
+//  jm jo kch v likhe react component i.e <Card .... /> ke ander wo hamesha custome attribute hi khelayega i.e
+ ClassName v ek costume attribute hi hai
+// even wo css me
+
+
+
+
+
+
+
+
+
+
+Appp.jsx
+
+
+
+import React from "react";
+import Sdata from "./Sdata";
+import Card from "./Cards";
+import Netf from "./ Netflix";
+
+
+
+const FatS = () =>{
+
+    const favchar =  "Netflix";
+    if(favchar === "Netflix")
+    {
+    return ( <>
+    <Netf/> 
+    </>
+    );
+    
+    }
+    else{
+    return( <>
+    <Card 
+           imgs = {Sdata[1].imgs}
+           title = {Sdata[1].title}
+           sname = {Sdata[1].sname}
+           link = {Sdata[1].link}
+    
+    /> 
+    </>
+    );
+    
+    }
+
+}
+
+const App = () =>{
+
+       return (
+              <>
+          <h1 className =" heading ">List of 5 netflix series</h1>
+          <FatS/>
+            </>
+        );
+    
+    
+     
+       };
+
+export default App;
+
+
+
+
+
+Netflix.jsx 
+
+
+import React from "./react";
+import Cards from "./Card";
+import Sdata from "./Sdata";
+
+const Netf = () =>{
+
+return (
+
+    <>
+    <Card 
+         className = "upasana"
+         imgs = {Sdata[0].imgs}
+         title = {Sdata[0].title}
+         sname = {Sdata[0].sname}
+         link = {Sdata[0].link}
+    
+    />    
+    </>
+
+)
+
+
+
+}
+
+export default Netf;
+
+
+
+
+
+
+
+
+
+
+
+Cards.jsx
+
+
+
+function Card(props){
+    // console.log(props)
+    return (<>
+    <div className="Cards">
+        <div className="card">
+            {/* <img src="https://picsum.photos/200/300" alt="mypicoo" className="card__img"/> */}
+            <img src={props.imgs} alt="mypicoo" className="card__img"/>
+             <div className="card__info">
+             <span className="card__catagory">{props.title}</span>
+             <h3 className="card__title">{props.className}</h3>
+              {/* <a href="https://www.google.com/" target = "_blank"> */}
+              <a href={props.link} target = "_blank">
+                <button> Watch Now </button>
+              </a>
+    
+            </div>
+    
+        </div>
+        
+    </div>
+    <input type="text" value = "thapa"/>
+    </>);
+}
+export default Card;
+
+
+
+
+
+
+Sdata.jsx
+
+
+
+// Array of element and her ek array of element me ek object pass kar rhe hu
+
+
+const Sdata=[
+{
+    sname : "DARK",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series 22" ,
+    link : "https://www.google.com/",
+
+},
+{
+    sname : "COOL",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series 33" ,
+    link : "https://www.google.com/",
+
+},
+{
+    sname : "NGINX",
+    imgs : "https://picsum.photos/200/300",
+    title : " A netflix series 44" ,
+    link : "https://www.google.com/",
+
+},
+
+]
+export default Sdata;
+
+
+
+
+
+
+

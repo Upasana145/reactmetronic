@@ -1,0 +1,4 @@
+cd C:\Users\Datacore\Desktop\Reactjs\Reactjs\myapp\Backend
+npm init -y ----> to install backend package.json file
+npm i mysql nodemon cors express
+npm i bootstrap

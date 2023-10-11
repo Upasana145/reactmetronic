@@ -1,0 +1,23 @@
+ES6 template literal in JSX
+
+import React from "react";
+import  ReactDOM  from "react-dom";
+
+const fname = "upasana";
+const lname = "bharti";
+
+
+ReactDOM.render(
+  <>
+  <h1>Hellloooooo  {fname} {lname}</h1> 
+  <h1>Hellloooooo  {fname + lname}</h1> 
+  <h1>{`helllooooooo ${fname} my ${lname}`}</h1> 
+  <h1>Hellloooooo 2 + 3</h1>
+  <h1>Hellloooooo{2+3}</h1>
+  </>
+,
+document.getElementById("root")
+);
+
+
+

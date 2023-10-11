@@ -1,0 +1,138 @@
+const express = require('express');
+const mysql = require('mysql');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'signup',
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the database');
+});
+
+app.post('/signup', (req, res) => {
+  const sql = 'INSERT INTO login (`firstname`, `lastname`, `email`, `password`) VALUES (?, ?, ?, ?)';
+  const values = [
+    req.body.firstname,
+    req.body.lastname,
+    req.body.email,
+    req.body.password,
+  ];
+  db.query(sql, values, (err, data) => {
+    if (err) {
+      console.error('Error inserting data:', err);
+      return res.json('Error');
+    }
+    return res.json('Success');
+  });
+});
+
+app.post('/login', (req, res) => {
+  const sql = 'SELECT * FROM login WHERE `email` = ? AND `password` = ?';
+  db.query(sql, [req.body.email, req.body.password], (err, data) => {
+    if (err) {
+      console.error('Error querying data:', err);
+      return res.json('Error');
+    }
+    if (data.length > 0) {
+      return res.json('Success');
+    } else {
+      return res.json('Fail');
+    }
+  });
+});
+
+
+
+
+
+
+This is a Node.js application that uses the Express framework to create a server for handling signup and login functionalities. It interacts with a MySQL database to store and retrieve user information. The app listens on port 8081.
+
+- The app uses the `express` module for handling HTTP requests and responses.
+- The `mysql` module is used to connect to the local MySQL database with the specified credentials.
+- The `cors` middleware is used to enable Cross-Origin Resource Sharing, allowing the frontend to interact with the backend from different domains.
+- The `express.json()` middleware is used to parse incoming JSON data from requests.
+- Upon starting the server, it tries to connect to the MySQL database and logs whether the connection was successful or not.
+
+The application defines two endpoints:
+
+1. POST '/signup': This endpoint receives signup data (firstname, lastname, email, password) from the request body and inserts it into the 'login' table in the database. If successful, it responds with 'Success'; otherwise, it responds with 'Error'.
+
+2. POST '/login': This endpoint receives login data (email, password) from the request body and queries the 'login' table in the database to check if a matching entry exists. If there is a match, it responds with 'Success'; if not, it responds with 'Fail'.
+
+Overall, this application allows users to sign up and log in by interacting with the MySQL database for storing and retrieving user data.
+
+
+
+
+
+
+Sure, let's go through the code line by line and explain each part:
+
+1. `const express = require('express');`
+   - This line imports the 'express' module, which is a web application framework for Node.js. It simplifies the process of creating and handling HTTP servers and routes.
+
+2. `const mysql = require('mysql');`
+   - This line imports the 'mysql' module, which allows the application to interact with MySQL databases.
+
+3. `const cors = require('cors');`
+   - This line imports the 'cors' module, which is middleware used to enable Cross-Origin Resource Sharing. It allows the frontend to make requests to this backend from different domains.
+
+4. `const app = express();`
+   - This line creates an instance of the Express application, which is the main entry point for defining routes and handling HTTP requests.
+
+5. `app.use(cors());`
+   - This line tells the Express app to use the 'cors' middleware, enabling Cross-Origin Resource Sharing for all routes in the application.
+
+6. `app.use(express.json());`
+   - This line tells the Express app to use the built-in middleware 'express.json()', which parses incoming request bodies with JSON payloads. It makes the parsed data available in `req.body` for route handlers.
+
+7. `const db = mysql.createConnection({ ... });`
+   - This line establishes a connection to the MySQL database using the 'mysql' module. It creates a connection object called 'db' with the specified configuration parameters (host, user, password, database).
+
+8. `db.connect((err) => { ... });`
+   - This line attempts to connect to the MySQL database using the connection object 'db'. If there's an error during the connection process, the callback function will log the error. If the connection is successful, it will log "Connected to the database".
+
+9. `app.post('/signup', (req, res) => { ... });`
+   - This line defines a route for handling HTTP POST requests to the '/signup' endpoint. When a client sends a POST request to this endpoint, the callback function defined here will be executed.
+
+10. `const sql = 'INSERT INTO login ...';`
+    - This line defines an SQL query that will be used to insert user signup data into the 'login' table. The query uses placeholders (?, ?) to be filled in later with actual values.
+
+11. `const values = [req.body.firstname, ...];`
+    - This line creates an array 'values' containing the values to be inserted into the SQL query. These values are extracted from the request body, which was parsed by the 'express.json()' middleware.
+
+12. `db.query(sql, values, (err, data) => { ... });`
+    - This line executes the SQL query on the database using the 'query' method of the 'db' connection object. It attempts to insert the user data into the 'login' table. If there's an error during the query, the callback function will log the error. If the query is successful, it will respond with 'Success'; otherwise, it will respond with 'Error'.
+
+13. `app.post('/login', (req, res) => { ... });`
+    - This line defines a route for handling HTTP POST requests to the '/login' endpoint. When a client sends a POST request to this endpoint, the callback function defined here will be executed.
+
+14. `const sql = 'SELECT * FROM login ...';`
+    - This line defines an SQL query that will be used to retrieve user login data from the 'login' table based on the provided email and password.
+
+15. `db.query(sql, [req.body.email, req.body.password], (err, data) => { ... });`
+    - This line executes the SQL query on the database using the 'query' method of the 'db' connection object. It attempts to retrieve user data from the 'login' table based on the provided email and password. If there's an error during the query, the callback function will log the error. If the query returns data (matching user), it will respond with 'Success'; otherwise, it will respond with 'Fail'.
+
+16. `app.listen(8081, () => { ... });`
+    - This line starts the Express app, making it listen on port 8081. When the app is running and ready to accept requests, it will log "listening" to the console. Clients can now send requests to this application at 'http://localhost:8081/'.
+
+
+
+
+
+    
+
+

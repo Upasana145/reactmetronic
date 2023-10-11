@@ -1,0 +1,394 @@
+import React,{useState} from "react";
+import logo from "../src/assets/media/logos/logo-1.svg"
+import {Link, useNavigate} from 'react-router-dom';
+import Validation from './Signupvalidation';
+import axios from "axios"
+
+// C:\Users\Datacore\Desktop\Reactjs\Reactjs\myapp\src\assets
+function Signup()
+{
+
+  const [values, setValues]  = useState({
+    firstname : '',
+    lastname: '',
+    email : '', 
+    password: '',
+   
+  
+  })
+  
+  const navigate = useNavigate();
+  
+  const [error,setErrors] = useState({})
+  
+  const handleInput = (event) =>{
+      setValues(prev => ({...prev, [event.target.name]: [event.target.value]}))
+  }
+  
+  
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    const err = Validation(values);
+    setErrors(err);
+    if(err.firstname === "" && err.lastname === "" && err.email === "" && err.password === "")
+    {
+       axios.post('http://localhost:8081/signup',values)      
+       .then(res => 
+        {
+          navigate('/');
+        }
+         )
+       .catch(err => console.log(err));
+    }
+  
+  
+  }
+  
+
+return (<>
+
+<div className="d-flex flex-column flex-root">
+  {/*begin::Authentication - Sign-up */}
+  <div
+    className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+    style={{
+      backgroundImage: "url(assets/media/illustrations/sketchy-1/14.png"
+    }}
+  >
+    {/*begin::Content*/}
+    <div className="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+      {/*begin::Logo*/}
+      <a href="../../demo1/dist/index.html" className="mb-12">
+        <img
+          alt="Logo"
+          src= {logo}
+          className="h-40px"
+        />
+      </a>
+      {/*end::Logo*/}
+      {/*begin::Wrapper*/}
+      <div className="w-lg-600px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+        {/*begin::Form*/}
+        <form 
+          onSubmit={handleSubmit}
+          className="form w-100"
+          noValidate="novalidate"
+          id="kt_sign_up_form"
+        >
+          {/*begin::Heading*/}
+          <div className="mb-10 text-center">
+            {/*begin::Title*/}
+            <h1 className="text-dark mb-3">Create an Account</h1>
+            {/*end::Title*/}
+            {/*begin::Link*/}
+            <div className="text-gray-400 fw-bold fs-4">
+              Already have an account?
+              <Link to = "/"
+               
+                className="link-primary fw-bolder"
+              >
+                Sign in here
+              </Link>
+            </div>
+            {/*end::Link*/}
+          </div>
+          {/*end::Heading*/}
+          {/*begin::Action*/}
+          <button
+            type="button"
+            className="btn btn-light-primary fw-bolder w-100 mb-10"
+          >
+            <img
+              alt="Logo"
+              src="assets/media/svg/brand-logos/google-icon.svg"
+              className="h-20px me-3"
+            />
+            Sign in with Google
+          </button>
+          {/*end::Action*/}
+          {/*begin::Separator*/}
+          <div className="d-flex align-items-center mb-10">
+            <div className="border-bottom border-gray-300 mw-50 w-100" />
+            <span className="fw-bold text-gray-400 fs-7 mx-2">OR</span>
+            <div className="border-bottom border-gray-300 mw-50 w-100" />
+          </div>
+          {/*end::Separator*/}
+          {/*begin::Input group*/}
+          <div className="row fv-row mb-7">
+            {/*begin::Col*/}
+            <div className="col-xl-6">
+              <label className="form-label fw-bolder text-dark fs-6">
+                First Name
+              </label>
+              <input 
+                onChange={handleInput} 
+                className="form-control form-control-lg form-control-solid"
+                type="text"
+                placeholder=""
+                name="firstname"
+                autoComplete="off"
+              />
+            {error.firstname && <span className="text-danger">{error.firstname}</span>}
+            </div>
+            {/*end::Col*/}
+            {/*begin::Col*/}
+            <div className="col-xl-6">
+              <label className="form-label fw-bolder text-dark fs-6">
+                Last Name
+              </label>
+              <input
+                onChange={handleInput} 
+                className="form-control form-control-lg form-control-solid"
+                type="text"
+                placeholder=""
+                name="lastname"
+                autoComplete="off"
+              />
+            {error.lastname && <span className="text-danger">{error.lastname}</span>}
+
+            </div>
+            {/*end::Col*/}
+          </div>
+          {/*end::Input group*/}
+          {/*begin::Input group*/}
+          <div className="fv-row mb-7">
+            <label className="form-label fw-bolder text-dark fs-6">Email</label>
+            <input
+              onChange={handleInput} 
+              className="form-control form-control-lg form-control-solid"
+              type="email"
+              placeholder=""
+              name="email"
+              autoComplete="off"
+            />
+            {error.email && <span className="text-danger">{error.email}</span>}
+          </div>
+          {/*end::Input group*/}
+          {/*begin::Input group*/}
+          <div className="mb-10 fv-row" data-kt-password-meter="true">
+            {/*begin::Wrapper*/}
+            <div className="mb-1">
+              {/*begin::Label*/}
+              <label className="form-label fw-bolder text-dark fs-6">
+                Password
+              </label>
+              {/*end::Label*/}
+              {/*begin::Input wrapper*/}
+              <div className="position-relative mb-3">
+                <input
+                 onChange={handleInput} 
+                  className="form-control form-control-lg form-control-solid"
+                  type="password"
+                  placeholder=""
+                  name="password"
+                  autoComplete="off"
+                />
+                <span
+                  className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
+                  data-kt-password-meter-control="visibility"
+                >
+                  <i className="bi bi-eye-slash fs-2" />
+                  <i className="bi bi-eye fs-2 d-none" />
+                </span>
+            {error.password && <span className="text-danger">{error.password}</span>}
+              </div>
+              {/*end::Input wrapper*/}
+              {/*begin::Meter*/}
+              <div
+                className="d-flex align-items-center mb-3"
+                data-kt-password-meter-control="highlight"
+              >
+                <div className="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2" />
+                <div className="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2" />
+                <div className="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2" />
+                <div className="flex-grow-1 bg-secondary bg-active-success rounded h-5px" />
+              </div>
+              {/*end::Meter*/}
+            </div>
+            {/*end::Wrapper*/}
+            {/*begin::Hint*/}
+            <div className="text-muted">
+              Use 8 or more characters with a mix of letters, numbers &amp;
+              symbols.
+            </div>
+            {/*end::Hint*/}
+          </div>
+          {/*end::Input group=*/}
+          {/*begin::Input group*/}
+          {/* <div className="fv-row mb-5">
+            <label className="form-label fw-bolder text-dark fs-6">
+              Confirm Password
+            </label>
+            <input
+             onChange={handleInput} 
+              className="form-control form-control-lg form-control-solid"
+              type="password"
+              placeholder=""
+              name="confirmpassword"
+              autoComplete="off"
+            />
+            {error.confirmpassword && <span className="text-danger">{error.confirmpassword}</span>}
+
+          </div> */}
+          {/*end::Input group*/}
+          {/*begin::Input group*/}
+          <div className="fv-row mb-10">
+            <label className="form-check form-check-custom form-check-solid form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                name="toc"
+                defaultValue={1}
+              />
+              <span className="form-check-label fw-bold text-gray-700 fs-6">
+                I Agree
+                <a href="#" className="ms-1 link-primary">
+                  Terms and conditions
+                </a>
+                .
+              </span>
+            </label>
+          </div>
+          {/*end::Input group*/}
+          {/*begin::Actions*/}
+
+          {/* <a className="text-center">
+            <button
+             type="submit" 
+              id="kt_sign_up_submit"
+              className="btn btn-lg btn-primary"
+            >
+              <span className="indicator-label">Submit</span>
+
+
+              <span className="indicator-progress">
+                Please wait...
+                <span className="spinner-border spinner-border-sm align-middle ms-2" />
+              </span>
+            </button>
+          </a> */}
+          <button type="submit"   className='btn btn-success w-100 rounded-0'><strong>Sign up</strong></button>
+
+          {/*end::Actions*/}
+        </form>
+        {/*end::Form*/}
+      </div>
+      {/*end::Wrapper*/}
+    </div>
+    {/*end::Content*/}
+    {/*begin::Footer*/}
+    <div className="d-flex flex-center flex-column-auto p-10">
+      {/*begin::Links*/}
+      <div className="d-flex align-items-center fw-bold fs-6">
+        <a
+          href="https://keenthemes.com"
+          className="text-muted text-hover-primary px-2"
+        >
+          About
+        </a>
+        <a
+          href="mailto:support@keenthemes.com"
+          className="text-muted text-hover-primary px-2"
+        >
+          Contact
+        </a>
+        <a
+          href="https://1.envato.market/EA4JP"
+          className="text-muted text-hover-primary px-2"
+        >
+          Contact Us
+        </a>
+      </div>
+      {/*end::Links*/}
+    </div>
+    {/*end::Footer*/}
+  </div>
+  {/*end::Authentication - Sign-up*/}
+</div>
+
+
+</>)
+
+};
+export default Signup
+
+
+
+
+
+
+
+
+
+
+
+
+This is a React component for a signup form. It utilizes React hooks (useState) for managing form data and errors. The form fields include First Name, Last Name, Email, and Password. The component uses a custom validation function (`Validation`) to validate form input. It also makes use of the `axios` library to send a POST request to a backend server when the form is submitted.
+
+1. Import necessary dependencies: React, useState hook, logo image, Link, useNavigate from 'react-router-dom', 'Validation' function, and 'axios' library.
+
+2. Create a functional component named 'Signup'.
+
+3. Initialize state using the useState hook. The state 'values' holds the form field values (firstname, lastname, email, password), and 'error' holds validation errors for each field.
+
+4. Set up the `useNavigate` hook to handle navigation after successful form submission.
+
+5. Define the 'handleInput' function to update the 'values' state whenever a form field value changes.
+
+6. Define the 'handleSubmit' function to handle form submission. It first validates the form input using the 'Validation' function, updates the 'error' state with validation results, and then sends a POST request to the server using 'axios' if there are no validation errors.
+
+7. The JSX code renders the signup form with form inputs, labels, and validation error messages. It also includes a link to the login page and a "Sign up" button to submit the form.
+
+8. The component returns the JSX code for the signup form.
+
+Overall, this React component creates a user signup form with form validation and submission functionality, allowing users to sign up with their firstname, lastname, email, and password. Upon successful signup, users will be navigated to the login page.
+
+
+
+
+
+Sure, let's go through the code line by line and explain each part:
+
+1. `import React, { useState } from "react";`
+   - This line imports the necessary modules from the 'react' package. It imports 'React' itself, which is required for creating React components, and 'useState' hook, which allows functional components to have state.
+
+2. `import logo from "../src/assets/media/logos/logo-1.svg";`
+   - This line imports the logo image from the specified path. The 'logo' variable will now hold the path to the logo image.
+
+3. `import { Link, useNavigate } from 'react-router-dom';`
+   - This line imports two components from the 'react-router-dom' package: 'Link' and 'useNavigate'. 'Link' is used to create links to different routes in the application, and 'useNavigate' is a hook that allows programmatic navigation in React Router.
+
+4. `import Validation from './Signupvalidation';`
+   - This line imports the 'Validation' function from a file named 'Signupvalidation'. This function is likely used for form validation.
+
+5. `import axios from "axios";`
+   - This line imports the 'axios' library, which is used for making HTTP requests. It will be used to send a POST request to the server when the form is submitted.
+
+6. `function Signup() { ... }`
+   - This line defines a functional component named 'Signup'.
+
+7. `const [values, setValues] = useState({ ... });`
+   - This line initializes the 'values' state using the 'useState' hook. The 'values' state is an object that holds the form field values: 'firstname', 'lastname', 'email', and 'password'.
+
+8. `const navigate = useNavigate();`
+   - This line initializes the 'navigate' variable using the 'useNavigate' hook. It will be used for programmatic navigation to a different route (login page) after successful form submission.
+
+9. `const [error, setErrors] = useState({ ... });`
+   - This line initializes the 'error' state using the 'useState' hook. The 'error' state is an object that holds the validation errors for each form field.
+
+10. `const handleInput = (event) => { ... }`
+    - This line defines the 'handleInput' function, which is called when a form field value changes. It updates the 'values' state with the new form field value.
+
+11. `const handleSubmit = (event) => { ... }`
+    - This line defines the 'handleSubmit' function, which is called when the form is submitted. It prevents the default form submission behavior, validates the form input using the 'Validation' function, updates the 'error' state with the validation results, and if there are no validation errors, it sends a POST request to the server using 'axios'.
+
+12. The JSX code defines the structure of the signup form. It includes the logo, form fields for First Name, Last Name, Email, and Password, validation error messages, a link to the login page, and a "Sign up" button.
+
+13. `return (<> ... </>);`
+    - This line returns the JSX code for the signup form. The form is wrapped in an empty fragment (`<> ... </>`) since a component can only return a single JSX element.
+
+14. `export default Signup;`
+    - This line exports the 'Signup' component, making it available for other parts of the application to import and use.
+
+
+    

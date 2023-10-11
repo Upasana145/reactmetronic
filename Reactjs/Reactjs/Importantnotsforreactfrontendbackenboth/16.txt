@@ -1,0 +1,86 @@
+Tutorial 18 react.js by thapa technical
+
+
+index.js 
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Heading from './Heading';
+import Para from './Para';
+import List from './List';
+
+import Appp from './Appp';
+ReactDOM.render(
+<>
+<Appp/>
+</>
+,document.getElementById("root")
+);
+
+// maine component create kia ab wo jo aapka component hai wo aapka khud ka costume element khelayega
+// maine react ke help se khud ka costume element create kia i.e :- Heading   some predefined elemets are :- <p>,<h1>
+
+
+Appp.jsx
+
+
+import React from 'react';
+import Heading from './Heading';
+import Para from './Para';
+import List from './List';
+function Appp()
+{
+return (<>
+<Heading/>
+<List/>
+<Para/>
+</>
+)
+}
+export default Appp;
+
+
+
+List.jsx
+
+import React from "react";
+function List()
+{
+    return <ol>
+  <li>Upasana </li>
+  <li>Bharti </li>
+  <li>Technical</li>
+  <li>Upasana Technical5555</li>
+</ol>
+    
+    
+}
+export default List;
+
+
+
+
+Para.jsx
+
+import React from "react";
+function Para()
+{
+return <p>my name is cool Upasana</p>
+}
+export default Para;
+
+
+
+
+Heading
+
+import React from "react";
+function Heading()
+{
+return <h1>Heyy everyone</h1>;
+}
+
+export default Heading;
+
+//Hamare pass bs ek index.js file hota hai jo ki bs appp.js file ko render kar rha hai.

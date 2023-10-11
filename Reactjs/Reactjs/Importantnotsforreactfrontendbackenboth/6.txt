@@ -1,0 +1,33 @@
+thapa technical tut--> 8
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+
+ReactDOM.render(
+<div>
+<h1>Hello world </h1>
+<p>Subscribe my channel </p>
+</div>,
+document.getElementById("root"));
+
+agar hm div use karte hai to extra node aa jata hai but agar hm react fragement use karte hai to usse extra node ni ata hai
+or ye fast hota hai div se .... inspect kar ke dekh lo
+
+
+a special fragment syntax
+react 16.2 also introduced a syntactical suger for fragments
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+
+ReactDOM.render(
+<>
+<h1>Hello world </h1>
+<p>Subscribe my channel </p>
+</>,
+document.getElementById("root"));

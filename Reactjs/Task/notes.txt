@@ -1,0 +1,7 @@
+backend 
+npm init -y
+npm  i  cors express mysql nodemon
+
+rfce ---> isse bs form create hota hai
+cd frontend
+npm i bootstrap react-router-dom

@@ -1,0 +1,439 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../src/assets/media/logos/logo-1.svg";
+import Validation from "./LoginValidation";
+import axios from "axios";
+
+// C:\Users\Datacore\Desktop\Reactjs\Reactjs\myapp\src\assets
+function Signin() {
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const [error, setErrors] = useState({});
+
+  const handleInput = (event) => {
+    setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const err = Validation(values);
+    setErrors(err);
+    if (err.email === "" && err.password === "") {
+      axios
+        .post("http://localhost:8081/login", values)
+        .then((res) => {
+          console.log(res,'response data========');
+          if (res.data === "Success") {
+            navigate("/dashboard");
+          } else {
+            alert("No record existed");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+  console.log(values, "================");
+  return (
+    <>
+      <div className="d-flex flex-column flex-root">
+        <div
+          className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+          style={{
+            backgroundImage: "url(assets/media/illustrations/sketchy-1/14.png)",
+          }}
+        >
+          <div className="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+            <a href="../../demo1/dist/index.html" className="mb-12">
+              <img alt="Logo" src={logo} className="h-40px" />
+            </a>
+            <div className="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="form w-100"
+                noValidate="novalidate"
+                id="kt_sign_in_form"
+                data-kt-redirect-url="../../demo1/dist/index.html"
+                action="#"
+              >
+                <div className="text-center mb-10">
+                  <h1 className="text-dark mb-3">Sign In to Metronic</h1>
+                  <div className="text-gray-400 fw-bold fs-4">
+                    New Here?
+                    <Link to="/signup" className="link-primary fw-bolder">
+                      Create an Account
+                    </Link>
+                  </div>
+                </div>
+                <div className="fv-row mb-10">
+                  <label className="form-label fs-6 fw-bolder text-dark">
+                    Email
+                  </label>
+                  <input
+                    onChange={handleInput}
+                    value={values.email}
+                    className="form-control form-control-lg form-control-solid"
+                    type="text"
+                    name="email"
+                    autoComplete="off"
+                  />
+                  {error.email && (
+                    <span className="text-danger">{error.email}</span>
+                  )}
+                </div>
+                <div className="fv-row mb-10">
+                  <div className="d-flex flex-stack mb-2">
+                    <label className="form-label fw-bolder text-dark fs-6 mb-0">
+                      Password
+                    </label>
+                    <a
+                      href="../../demo1/dist/authentication/layouts/basic/password-reset.html"
+                      className="link-primary fs-6 fw-bolder"
+                    >
+                      Forgot Password ?
+                    </a>
+                  </div>
+                  <input
+                    onChange={handleInput}
+                    value={values.password}
+                    className="form-control form-control-lg form-control-solid"
+                    type="password"
+                    name="password"
+                    autoComplete="off"
+                  />
+                  {error.password && (
+                    <span className="text-danger"> {error.password} </span>
+                  )}
+                </div>
+                <div className="text-center">
+                  <button
+                    type="submit"
+                    id="kt_sign_in_submit"
+                    className="btn btn-lg btn-primary w-100 mb-5"
+                  >
+                    <span className="indicator-label">Continue</span>
+                    <span className="indicator-progress">
+                      Please wait...
+                      <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                  </button>
+                  <div className="text-center text-muted text-uppercase fw-bolder mb-5">
+                    or
+                  </div>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100 mb-5"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/google-icon.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Google
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100 mb-5"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/facebook-4.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Facebook
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/apple-black.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Apple
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="d-flex flex-center flex-column-auto p-10">
+            <div className="d-flex align-items-center fw-bold fs-6">
+              <a
+                href="https://keenthemes.com"
+                className="text-muted text-hover-primary px-2"
+              >
+                About
+              </a>
+              <a
+                href="mailto:support@keenthemes.com"
+                className="text-muted text-hover-primary px-2"
+              >
+                Contact
+              </a>
+              <a
+                href="https://1.envato.market/EA4JP"
+                className="text-muted text-hover-primary px-2"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+export default Signin;
+
+
+
+
+
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../src/assets/media/logos/logo-1.svg";
+import Validation from "./LoginValidation";
+import axios from "axios";
+
+// C:\Users\Datacore\Desktop\Reactjs\Reactjs\myapp\src\assets
+function Signin() {
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const [error, setErrors] = useState({});
+
+  const handleInput = (event) => {
+    setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const err = Validation(values);
+    setErrors(err);
+    if (err.email === "" && err.password === "") {
+      axios
+        .post("http://localhost:8081/login", values)
+        .then((res) => {
+          console.log(res,'response data========');
+          if (res.data === "Success") {
+            navigate("/dashboard");
+          } else {
+            alert("No record existed");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+  console.log(values, "================");
+  return (
+    <>
+      <div className="d-flex flex-column flex-root">
+        <div
+          className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+          style={{
+            backgroundImage: "url(assets/media/illustrations/sketchy-1/14.png)",
+          }}
+        >
+          <div className="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+            <a href="../../demo1/dist/index.html" className="mb-12">
+              <img alt="Logo" src={logo} className="h-40px" />
+            </a>
+            <div className="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="form w-100"
+                noValidate="novalidate"
+                id="kt_sign_in_form"
+                data-kt-redirect-url="../../demo1/dist/index.html"
+                action="#"
+              >
+                <div className="text-center mb-10">
+                  <h1 className="text-dark mb-3">Sign In to Metronic</h1>
+                  <div className="text-gray-400 fw-bold fs-4">
+                    New Here?
+                    <Link to="/signup" className="link-primary fw-bolder">
+                      Create an Account
+                    </Link>
+                  </div>
+                </div>
+                <div className="fv-row mb-10">
+                  <label className="form-label fs-6 fw-bolder text-dark">
+                    Email
+                  </label>
+                  <input
+                    onChange={handleInput}
+                    value={values.email}
+                    className="form-control form-control-lg form-control-solid"
+                    type="text"
+                    name="email"
+                    autoComplete="off"
+                  />
+                  {error.email && (
+                    <span className="text-danger">{error.email}</span>
+                  )}
+                </div>
+                <div className="fv-row mb-10">
+                  <div className="d-flex flex-stack mb-2">
+                    <label className="form-label fw-bolder text-dark fs-6 mb-0">
+                      Password
+                    </label>
+                    <a
+                      href="../../demo1/dist/authentication/layouts/basic/password-reset.html"
+                      className="link-primary fs-6 fw-bolder"
+                    >
+                      Forgot Password ?
+                    </a>
+                  </div>
+                  <input
+                    onChange={handleInput}
+                    value={values.password}
+                    className="form-control form-control-lg form-control-solid"
+                    type="password"
+                    name="password"
+                    autoComplete="off"
+                  />
+                  {error.password && (
+                    <span className="text-danger"> {error.password} </span>
+                  )}
+                </div>
+                <div className="text-center">
+                  <button
+                    type="submit"
+                    id="kt_sign_in_submit"
+                    className="btn btn-lg btn-primary w-100 mb-5"
+                  >
+                    <span className="indicator-label">Continue</span>
+                    <span className="indicator-progress">
+                      Please wait...
+                      <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                  </button>
+                  <div className="text-center text-muted text-uppercase fw-bolder mb-5">
+                    or
+                  </div>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100 mb-5"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/google-icon.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Google
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100 mb-5"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/facebook-4.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Facebook
+                  </a>
+                  <a
+                    href="#"
+                    className="btn btn-flex flex-center btn-light btn-lg w-100"
+                  >
+                    <img
+                      alt="Logo"
+                      src="assets/media/svg/brand-logos/apple-black.svg"
+                      className="h-20px me-3"
+                    />
+                    Continue with Apple
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="d-flex flex-center flex-column-auto p-10">
+            <div className="d-flex align-items-center fw-bold fs-6">
+              <a
+                href="https://keenthemes.com"
+                className="text-muted text-hover-primary px-2"
+              >
+                About
+              </a>
+              <a
+                href="mailto:support@keenthemes.com"
+                className="text-muted text-hover-primary px-2"
+              >
+                Contact
+              </a>
+              <a
+                href="https://1.envato.market/EA4JP"
+                className="text-muted text-hover-primary px-2"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+export default Signin;
+
+
+
+
+
+
+
+Sure, let's go through the code line by line and explain each part:
+
+1. `import React, { useState } from "react";`
+   - This line imports the necessary modules from the 'react' package. It imports 'React' itself, which is required for creating React components, and 'useState' hook, which allows functional components to have state.
+
+2. `import { Link, useNavigate } from "react-router-dom";`
+   - This line imports two components from the 'react-router-dom' package: 'Link' and 'useNavigate'. 'Link' is used to create links to different routes in the application, and 'useNavigate' is a hook that allows programmatic navigation in React Router.
+
+3. `import logo from "../src/assets/media/logos/logo-1.svg";`
+   - This line imports the logo image from the specified path. The 'logo' variable will now hold the path to the logo image.
+
+4. `import Validation from "./LoginValidation";`
+   - This line imports the 'Validation' function from a file named 'LoginValidation'. This function is likely used for form validation.
+
+5. `import axios from "axios";`
+   - This line imports the 'axios' library, which is used for making HTTP requests. It will be used to send a POST request to the server when the form is submitted.
+
+6. `function Signin() { ... }`
+   - This line defines a functional component named 'Signin'.
+
+7. `const [values, setValues] = useState({ ... });`
+   - This line initializes the 'values' state using the 'useState' hook. The 'values' state is an object that holds the form field values: 'email' and 'password'.
+
+8. `const navigate = useNavigate();`
+   - This line initializes the 'navigate' variable using the 'useNavigate' hook. It will be used for programmatic navigation to a different route (dashboard page) after successful form submission.
+
+9. `const [error, setErrors] = useState({ ... });`
+   - This line initializes the 'error' state using the 'useState' hook. The 'error' state is an object that holds the validation errors for each form field.
+
+10. `const handleInput = (event) => { ... }`
+    - This line defines the 'handleInput' function, which is called when a form field value changes. It updates the 'values' state with the new form field value.
+
+11. `const handleSubmit = (event) => { ... }`
+    - This line defines the 'handleSubmit' function, which is called when the form is submitted. It prevents the default form submission behavior, validates the form input using the 'Validation' function, updates the 'error' state with the validation results, and if there are no validation errors, it sends a POST request to the server using 'axios'.
+
+12. The JSX code defines the structure of the signin form. It includes the logo, form fields for Email and Password, validation error messages, links to sign up or reset password, and buttons to sign in with Google, Facebook, and Apple.
+
+13. `return (<> ... </>);`
+    - This line returns the JSX code for the signin form. The form is wrapped in an empty fragment (`<> ... </>`) since a component can only return a single JSX element.
+
+14. `export default Signin;`
+    - This line exports the 'Signin' component, making it available for other parts of the application to import and use.
+
+
+    

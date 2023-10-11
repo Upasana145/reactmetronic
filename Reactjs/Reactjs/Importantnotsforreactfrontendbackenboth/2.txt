@@ -1,0 +1,39 @@
+react.js org.com ---> official documentation name
+npx and npm me difference--->
+npm ek package manager hai jo ki package ko permanently install karne me help karta hai lekin npx 
+kisi v package ko temperorely install karne me help karta hai... suppose agar hmko ek hi time use karna hai create-react-app 
+package ko to mai npx use karungi
+
+
+react framework hai ya library hai??
+react library hai javascript ka lekin hmlog isko framework v bolte hai qki ye takar deta hai angular, jaise framework ko
+
+
+
+by thapa technical installation of react 
+tutorial ->4
+
+1. Install Nodejs and npm
+2. Install Visual Studio Code
+3. Install React from terminal 
+a: npm install -g create-react-app
+b: create-react-app --version
+c: create-react-app<projectname>
+
+cd c:\Users\Datacore\Desktop\Reactjs\Reactjs
+dir ---> to see all directory present in directory
+
+
+
+
+javascript ke help se ye wala div "<div id="root"></div>" populate hoga
+
+difference between components , props, and state
+
+components --> it is just like a template 
+props ---> it is just like a details that we fill in the template
+state ---> it is just like a heading
+
+
+app.js ----> ye ek component hai
+react do tarah ka component use karti hai function based component and class based components

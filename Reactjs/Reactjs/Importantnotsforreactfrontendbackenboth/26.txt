@@ -1,0 +1,302 @@
+Hooks in Reactjs
+
+
+
+Hooks are new features introduced in  the React 16.8 version
+
+It allows you to use state and other React features without writing a class. Hooks are the functions
+which "hooks into" React state and lifecycle features from function components
+
+it doesnot work inside classes.
+
+Hooks should always be used at the top level of the react functions.
+
+Node version 6 or above . NPM version 5.2 or above.
+
+
+
+
+index.js
+
+
+import React from "react";
+import ReactDOM  from "react-dom";
+import Appp from "./Appp";
+ReactDOM.render(
+<>
+<Appp/>
+
+</>, 
+document.getElementById("root")
+);
+
+
+
+
+
+Appp.jsx
+
+
+
+
+
+import React, { useState }  from "react";
+import "./style.css";
+
+const Appp = () =>{
+    const state = useState();
+    // console.log(state);   
+    // useState is an array which returns an array of two items  i.e state object(current data) 
+    // and updated function(updated data)
+    // CURRENT DATA AND UPDATED DATA = INITIAL DATA
+    // useState ko hi hm bolte hai hooks in react
+    // const [ count , setCount] = useState(0);
+    
+    
+    
+    const [ count, setCount ] = useState(5);
+    
+    const IncNum = ()=>
+    { 
+
+        setCount(count + 1);
+        console.log("Clicked");
+    };
+
+    const DecNum = () =>
+    {
+        setCount(count - 1);
+        console.log("Clicked");
+    }
+
+return (<>
+<h1> {count} </h1>
+<section className="button">
+<button onClick={IncNum}>Plus</button>   
+
+<button onClick={DecNum}>Minus</button> 
+</section>
+
+{/* // onClick event of javascript camel case convension me hona chaiye and curly bracket me v jo likha jaa
+rha hai wo as a component consider karo and uska phlela letter capital me likho */}
+</>
+);
+};
+
+export default Appp;
+
+
+// Array destructuring 
+
+// const name = ['vi','no','d'];
+// name[0]
+// const[name1, name2, name3] = name
+// name1 
+// name2
+
+
+//Usestate ke though hm kisi v variable ka state change kar skte hai   
+// const [count, setCount] = useState(5)  count ka initial  value 5 hoga setCount ek function hai wo ek updated data hai jo ki
+// count ka data ko update kar dega
+
+
+
+
+
+
+//******************************************************************************************************************
+Notes :-
+
+
+import React, { useState } from "react";
+import "./style.css";
+
+
+These lines import the necessary dependencies. React is imported from the "react" package, and useState is
+imported from the "react" package as a named import. The useState hook 
+allows us to add state functionality to functional components. The "./style.css" file is imported to 
+apply custom styles
+
+
+
+
+
+const Appp = () => {
+  const state = useState();
+  // console.log(state);
+  // useState is an array which returns an array of two items: 
+  // the state object (current data) and the updated function (updated data).
+  // The current data and updated data are initially the same.
+  // useState is called a hook in React.
+
+  // const [ count , setCount] = useState(0);
+  const [count, setCount] = useState(5);
+
+
+
+
+
+This line declares a functional component called Appp. The component uses arrow function syntax (() =>).
+ Inside the component, the useState hook is used to
+ declare a state variable count and a corresponding function setCount. useState(5) initializes the state of count to 5.
+
+
+
+
+const IncNum = () => {
+  setCount(count + 1);
+  console.log("Clicked");
+};
+
+
+
+
+
+This function, IncNum, is declared to handle the increment logic. When the button with the "Plus" label is clicked, it 
+increases the value of count by 1 using the setCount function. The console.log statement logs "Clicked" to the console.
+
+
+
+const DecNum = () => {
+  setCount(count - 1);
+  console.log("Clicked");
+};
+
+
+
+
+This function, DecNum, is declared to handle the decrement logic. When the button with the "Minus" label is clicked, it 
+decreases the value of count by 1 using the setCount function. The console.log statement logs "Clicked" to the console.
+
+
+
+return (
+  <>
+    <h1>{count}</h1>
+    <section className="button">
+      <button onClick={IncNum}>Plus</button>
+      <button onClick={DecNum}>Minus</button>
+    </section>
+  </>
+);
+
+
+
+
+This is the JSX code that will be rendered by the Appp component. It consists of an <h1> element that displays the
+ current value of count, which is accessed using curly braces {count}. The increment and decrement buttons trigger
+  the IncNum and DecNum functions respectively when clicked.
+ The button labels are "Plus" and "Minus". The JSX code is wrapped in empty fragment tags <> ... </>.
+
+
+ export default Appp;
+
+This line exports the Appp component as the default export of the module, allowing it to be imported and used in other files.
+
+Comment lines:
+
+// Array destructuring
+// const name = ['vi', 'no', 'd'];
+// name[0]
+// const [name1, name2, name3] = name
+// name1
+// name2
+
+
+These comments provide an explanation of array destructuring.
+ It demonstrates how to extract values from an array and assign them to individual variables.
+
+
+
+// useState allows us to change the state of any variable.
+// const [count, setCount] = useState(5)
+// Here, count is the initial value of 5, and setCount is a function that will update the value of count.
+
+
+
+These comments explain the usage of useState and how it allows us to change the state of any variable. 
+It provides an example where count is initialized to 5, and setCount is the function that will update the value of count.
+
+In summary, this code demonstrates the usage of the useState hook in a functional component. It creates a counter 
+application where the count state is initially set to 5. Clicking the "Plus" button increments the count, while 
+clicking the "Minus" button decrements it. The updated count is displayed using JSX in the component's return statement.
+
+
+
+
+//******************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.css
+
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.button button{
+ background-color: rgb(179, 247, 134);
+ padding: 14px ;
+ margin: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
